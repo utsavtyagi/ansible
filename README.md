@@ -1,5 +1,5 @@
 
-# Ansible Training Course
+# Ansible
 
 ## 1. Introduction to Ansible
 Ansible is an open-source IT automation tool. It helps automate configuration management, application deployment, and task automation.
