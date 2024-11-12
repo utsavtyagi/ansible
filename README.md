@@ -44,23 +44,25 @@ In summary, while the Ansible control node is typically installed on a Unix-like
 
 
 **Ansible Installation Steps**
+
 Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., CentOS, RHEL, Fedora).
 
 Step 1: Install EPEL (Extra Packages for Enterprise Linux) Repository
+
 EPEL provides additional packages, including Ansible.
 
 ```bash
 sudo dnf install epel-release -y
 ```
 
-Step 2: Install Ansible
-After enabling EPEL, install Ansible.
+Step 2: Install Ansible (After enabling EPEL, install Ansible.)
 
 ```bash
 sudo dnf install ansible -y
 ```
 
 Step 3: Install Python Package Manager (pip)
+
 Python's package manager is required to install additional Python modules like pywinrm for managing Windows systems.
 
 ```bash
@@ -68,6 +70,7 @@ sudo dnf install python3-pip -y
 ```
 
 Step 4: Install pywinrm Using pip
+
 The pywinrm module allows Ansible to communicate with Windows hosts via WinRM (Windows Remote Management).
 
 ```bash
@@ -75,6 +78,7 @@ sudo pip install pywinrm
 ```
 
 Verify Ansible Installation
+
 Check the installed version of Ansible to confirm the setup.
 
 ```bash
@@ -84,6 +88,7 @@ ansible --version
 
 
 ## 2. Understanding YAML
+
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
 
 ### YAML Example
