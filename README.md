@@ -82,13 +82,6 @@ ansible --version
 
 
 
-
-To install Ansible on a Linux system:
-```bash
-sudo apt update
-sudo apt install ansible -y
-```
-
 ## 2. Understanding YAML
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
 
