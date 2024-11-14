@@ -30,6 +30,7 @@ Ansible can be installed on:
 
 
 **Managed Nodes**
+
 ![image](https://github.com/user-attachments/assets/93a9d476-6f66-4138-9b6a-b89fe459650a)
 
 
