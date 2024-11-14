@@ -106,14 +106,6 @@ Flower: Lotus
 #### Array/List
 ```yaml
 ---
-Fruit: Mango
-Vegetable: Tomato
-Flower: Lotus
-```
-
-#### Dictionary/Map
-```yaml
----
 Fruits:
   - Orange
   - Mango
@@ -128,6 +120,25 @@ Flowers:
   - Lotis
   - Rose
   - Lily
+```
+
+#### Dictionary/Map
+```yaml
+---
+Orange:
+  Calories: 62
+  Fat: 0.2 g
+  Carbs: 15.4 g
+
+Mango:
+  Calories: 135
+  Fat: 0.6 g
+  Carbs: 35 g
+
+Banana:
+  Calories: 105
+  Fat: 0.3 g
+  Carbs: 27 g
 
 ```
 
