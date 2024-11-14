@@ -142,6 +142,30 @@ Banana:
 
 ```
 
+#### List of dictionaries
+```yaml
+---
+Fruits:
+  - Orange:
+      Calories: 62
+      Fat: 0.2 g
+      Carbs: 15.4 g
+   
+  - Mango:
+      Calories: 135
+      Fat: 0.6 g
+      Carbs: 35 g
+   
+  - Banana:
+      Calories: 105
+      Fat: 0.3 g
+      Carbs: 27 g
+
+```
+
+
+
+
 ### Key Points
 - Indentation matters.
 - Use `:` for key-value pairs.
