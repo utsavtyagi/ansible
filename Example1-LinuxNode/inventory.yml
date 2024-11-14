@@ -1,0 +1,6 @@
+all:
+  hosts:
+    172.16.1.210:
+  vars:
+    ansible_user: config
+    ansible_password: "*********"

@@ -1,0 +1,11 @@
+---
+- name: Print the hostname of the Linux server
+  hosts: all
+  tasks:
+    - name: Run echo command to display the hostname
+      shell: echo "Hello! I am a Linux Server. My name is $HOSTNAME"
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout

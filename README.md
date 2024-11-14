@@ -18,7 +18,7 @@ Ansible's design focuses on the following principles:
 **Idempotence and predictability:** Ansible only makes changes when necessary. If the system already matches the desired state defined in the playbook, no changes are made, even if the playbook is run multiple times.
 
 
-### Installation
+## 2. Installation
 
 Ansible can be installed on:
 
@@ -87,7 +87,7 @@ ansible --version
 
 
 
-## 2. Understanding YAML
+## 3. Understanding YAML
 
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
 YAML is a human-readable data serialization language. It is commonly used for configuration files and in applications where data is being stored.
@@ -164,8 +164,6 @@ Fruits:
 ```
 
 
-
-
 ### Key Points
 - Indentation matters.
 - Use `:` for key-value pairs.
@@ -174,165 +172,128 @@ Fruits:
 - List is ordered collection (order of items matters)
 - Use "#" to comment any line
 
+
 ## 3. Ansible Inventory
-The inventory file lists all hosts managed by Ansible. It can be static or dynamic.
+The inventory file lists all hosts managed by Ansible.
 
-### Static Inventory Example
-```ini
-[webservers]
-web1.example.com
-web2.example.com
+![alt text](image.png)
 
-[dbservers]
-db1.example.com
-```
+### Inventory Examples
 
-## 4. Inventory Formats
-Ansible supports different formats for inventory:
-- **INI format** (default)
-- **YAML format**
-- **Dynamic inventory** using scripts or cloud plugins.
+#### List of Servers
+This is a simple list of servers without any grouping.
 
-### YAML Inventory Example
 ```yaml
+---
 all:
   hosts:
-    web1.example.com:
-    web2.example.com:
-  children:
-    dbservers:
-      hosts:
-        db1.example.com:
+    server1.example.com:
+    server2.example.com:
+    server3.example.com:
 ```
 
-## 5. Grouping and Parent-Child Relationships
-You can create nested groups for easier management.
 
-### Example
-```ini
-[all_servers:children]
-webservers
-dbservers
+#### Groups and Servers
+This example includes groups and assigns servers to each group.
 
-[webservers]
-web1.example.com
-
-[dbservers]
-db1.example.com
-```
-
-## 6. Ansible Variables and Facts
-Variables store data that can be used in playbooks. Facts are system information gathered by Ansible.
-
-### Variable Example
 ```yaml
-vars:
-  app_version: "1.2.3"
+---
+AppGroup1:
+  hosts:
+    cclabapp01:
+    cclabauth01:
+    cclabwf01:
+
+AppGroup2:
+  hosts:
+    cclabapp02:
+    cclabauth02:
+    cclabwf01:
 ```
 
-### Using Facts
+#### Groups, Servers, and Parameters (Connection, Port, etc.)
+This example specifies additional parameters like connection type, port, and custom variables.
+
 ```yaml
-tasks:
-  - name: Print system information
-    debug:
-      msg: "The OS version is {{ ansible_distribution_version }}"
+---
+AppGroup1:
+  hosts:
+    cclabapp01:
+    cclabauth01:
+    cclabwf01:
+
+AppGroup2:
+  hosts:
+    cclabapp02:
+    cclabauth02:
+    cclabwf01:
+
+all:
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_server_cert_validation: ignore
+    ansible_winrm_transport: kerberos
+    ansible_winrm_port: 5986
+    ansible_winrm_scheme: https
 ```
 
-## 7. Ansible Playbooks
-Playbooks define tasks to be executed on hosts.
+
+
+## 4. Ansible Playbooks
+Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configuration management and automation script written in YAML that defines a set of tasks for Ansible to execute on remote machines. Playbooks are the main way to organize and execute automation jobs in Ansible. They can include various tasks, handlers, variables, and other elements needed to manage systems, configure applications, or deploy services.
+
+**Key Components of a Playbook:**
+
+**Plays:** A playbook consists of one or more "plays." Each play is an attempt to map a group of hosts to some tasks. A play runs tasks on selected machines based on the inventory.
+
+**Tasks:** Each play contains a list of tasks. A task defines an action to be performed on the target systems, such as installing a package, copying a file, or starting a service. Tasks use Ansible modules (like apt, yum, copy, etc.) to perform these actions.
+
+**Hosts:** Defines which machines (from the inventory) the tasks will be executed on. This can be a group of machines or a specific host.
+
+**Variables:** Variables can be used to define dynamic values such as paths, usernames, or any parameter that changes frequently. Variables can be set within the playbook or defined externally.
+
+**Handlers:** Handlers are special tasks that only run when notified by another task. Typically, handlers are used for things like restarting services after a configuration change.
 
 ### Playbook Example
 ```yaml
 ---
-- name: Install NGINX on web servers
-  hosts: webservers
-  tasks:
-    - name: Install NGINX
-      apt:
-        name: nginx
-        state: present
-```
-
-## 8. Ansible Modules and Plugins
-Modules are the building blocks of Ansible. Plugins extend Ansible functionality.
-
-### Using a Module Example
-```yaml
-- name: Create a file
+---
+- name: Print the hostname of the Linux server
   hosts: all
   tasks:
-    - name: Create a new file
-      file:
-        path: /tmp/testfile.txt
-        state: touch
+    - name: Run echo command to display the hostname
+      shell: echo "Hello! I am a Linux Server. My name is $HOSTNAME"
+
+    - name: Install chrony
+      shell: sudo dnf install chrony -y
 ```
+- **name:** Describes what the playbook or task does. It's just for readability.
 
-## 9. Ansible Handlers
-Handlers are triggered when tasks change the system state.
+- **hosts:** Specifies the host or group of hosts to run the tasks on. Here, all is the host group defined in the Ansible inventory, You can specify any group specified in the inventory.
 
-### Example
-```yaml
-tasks:
-  - name: Install Apache
-    apt:
-      name: apache2
-      state: present
-    notify:
-      - Restart Apache
+- **tasks:** Defines a list of tasks to execute on the hosts:
 
-handlers:
-  - name: Restart Apache
-    service:
-      name: apache2
-      state: restarted
-```
+            - Run echo command to display the hostname.
+            - Install chrony.
 
-## 10. Ansible Templates
-Templates use Jinja2 syntax for dynamic configuration.
 
-### Template Example (nginx.conf.j2)
-```jinja2
-server {
-    listen 80;
-    server_name {{ domain_name }};
-    location / {
-        proxy_pass http://{{ backend_server }};
-    }
-}
-```
+### Ansible Playbook Execution:
 
-### Using the Template
-```yaml
-- name: Configure NGINX
-  template:
-    src: nginx.conf.j2
-    dest: /etc/nginx/nginx.conf
-```
+You can run an Ansible playbook with the following command:
 
-## 11. Ansible Roles and Collections
-Roles are a way to organize playbooks into reusable components.
-
-### Creating a Role
 ```bash
-ansible-galaxy init myrole
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
-### Directory Structure
-```
-myrole/
-├── tasks
-│   └── main.yml
-├── templates
-├── vars
-└── handlers
+- Playbook.yml is the playbook file name.
+- inventory.yml is the inventory file name.
+
+```bash
+ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1'"
 ```
 
-### Using a Role in Playbook
-```yaml
-- hosts: all
-  roles:
-    - myrole
-```
+- "MachineGroupName='Group1'" is a extra variables we are passing in command.
+
 
 ## Conclusion
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.

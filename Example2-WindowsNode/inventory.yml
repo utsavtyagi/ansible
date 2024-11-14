@@ -1,0 +1,11 @@
+all:
+  hosts:
+    VMPACKAGE03:
+  vars:
+    ansible_user: NEWVISIONSOFT\configuser
+    ansible_password: "*********"
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    ansible_winrm_port: 5985
+    ansible_winrm_scheme: http
+    

@@ -1,0 +1,19 @@
+---
+- name: Print the hostname of the Windows server
+  hosts: "{{Group}}"
+  tasks:
+    - name: Run echo command to display the hostname
+      win_shell: echo "Hello! I am a Windows Server. My name is $(HOSTNAME)"
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout
+
+    - name: Run echo command to display the hostname
+      win_shell: Get-Process | Select Name
+      register: result_process
+
+    - name: Display the Process Result
+      debug:
+        var: result_process.stdout
