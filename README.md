@@ -90,15 +90,15 @@ ansible --version
 ## 2. Understanding YAML
 
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
+YAML is a human-readable data serialization language. It is commonly used for configuration files and in applications where data is being stored.
+YAML stands for yet another markup language or YAML ain’t markup language.
 
 ### YAML Example
 ```yaml
 ---
-name: John Doe
-age: 30
-address:
-  city: New York
-  zipcode: 10001
+Fruit: Mango
+Vegetable: Tomato
+Flower: Lotus
 ```
 
 ### Key Points
