@@ -2,7 +2,7 @@ all:
   hosts:
     CCLABAPP01:
   vars:
-    ansible_user: NEWVISIONSOFT\configuser
+    ansible_user: DOMAIN\USER
     ansible_password: "*********"
     ansible_connection: winrm
     ansible_winrm_transport: ntlm
