@@ -30,6 +30,9 @@ Ansible can be installed on:
 
 
 **Managed Nodes**
+![image](https://github.com/user-attachments/assets/93a9d476-6f66-4138-9b6a-b89fe459650a)
+
+
 Ansible can manage a wide variety of systems, including:
 
 Linux and Unix systems (e.g., Ubuntu, CentOS, Debian, Red Hat)
@@ -175,8 +178,6 @@ Fruits:
 
 ## 4. Ansible Inventory
 The inventory file lists all hosts managed by Ansible.
-
-![alt text](image.png)
 
 ### Inventory Examples
 
