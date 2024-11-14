@@ -170,6 +170,9 @@ Fruits:
 - Indentation matters.
 - Use `:` for key-value pairs.
 - Use `-` for lists.
+- Dictionary is unordered collectiom
+- List is ordered collection (order of items matters)
+- Use "#" to comment any line
 
 ## 3. Ansible Inventory
 The inventory file lists all hosts managed by Ansible. It can be static or dynamic.
