@@ -173,7 +173,7 @@ Fruits:
 - Use "#" to comment any line
 
 
-## 3. Ansible Inventory
+## 4. Ansible Inventory
 The inventory file lists all hosts managed by Ansible.
 
 ![alt text](image.png)
@@ -239,7 +239,7 @@ all:
 
 
 
-## 4. Ansible Playbooks
+## 5. Ansible Playbooks
 Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configuration management and automation script written in YAML that defines a set of tasks for Ansible to execute on remote machines. Playbooks are the main way to organize and execute automation jobs in Ansible. They can include various tasks, handlers, variables, and other elements needed to manage systems, configure applications, or deploy services.
 
 **Key Components of a Playbook:**
