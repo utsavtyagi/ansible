@@ -94,11 +94,41 @@ YAML is a human-readable data serialization language. It is commonly used for co
 YAML stands for yet another markup language or YAML ain’t markup language.
 
 ### YAML Example
+
+#### Key Value Pair
 ```yaml
 ---
 Fruit: Mango
 Vegetable: Tomato
 Flower: Lotus
+```
+
+#### Array/List
+```yaml
+---
+Fruit: Mango
+Vegetable: Tomato
+Flower: Lotus
+```
+
+#### Dictionary/Map
+```yaml
+---
+Fruits:
+  - Orange
+  - Mango
+  - Banana
+
+Vegetables:
+  - Tomato
+  - Carrot
+  - Potato
+
+Flowers:
+  - Lotis
+  - Rose
+  - Lily
+
 ```
 
 ### Key Points
