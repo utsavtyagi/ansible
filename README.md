@@ -377,7 +377,11 @@ ansible-playbook Playbook.yml -i inventory.yml
 #### 3. From the Command Line:
 
 ```bash
-ansible-playbook playbook.yml --extra-vars "example_var='CLI variable'"
+ansible-playbook Playbook.yml -i inventory.yml --extra-vars "example_var='CLI variable'"
+```
+
+```bash
+ansible-playbook Playbook.yml -i inventory.yml -e "example_var='CLI variable'"
 ```
 
 ### Types of Ansible Variables
