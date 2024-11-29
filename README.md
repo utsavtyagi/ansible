@@ -312,16 +312,28 @@ vars:
 
 **Using a Variable**
 ```yaml
-tasks:
-  - name: Print variable
-    debug:
-      msg: "{{ my_variable }}"
+---
+- name: Print the Variable
+  hosts: all
+  vars:
+    my_variable: "Hello, World!"
+
+  tasks:
+    - name: Print variable
+      debug:
+        msg: "{{ my_variable }}"
+
+```
+
+```bash
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ### Defining Variables
 
 #### 1. Inside a Playbook:
 ```yaml
+- name: Variable inside a playbook
 - hosts: all
   vars:
     example_var: "Ansible is awesome!"
@@ -333,7 +345,7 @@ tasks:
 
 #### 2. In a Separate File (Vars File): 
 
-Create vars.yml:
+Create variables.yml:
 ```yaml
 example_var: "Ansible from vars file!"
 ```

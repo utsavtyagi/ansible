@@ -1,0 +1,10 @@
+---
+- name: Variable
+  hosts: all
+  vars:
+    my_variable: "Hello, World!"
+
+  tasks:
+    - name: Print variable
+      debug:
+        msg: "{{ my_variable }}"
