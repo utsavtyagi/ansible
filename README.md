@@ -325,6 +325,7 @@ vars:
 
 ```
 
+Command:
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml
 ```
@@ -342,6 +343,10 @@ ansible-playbook Playbook.yml -i inventory.yml
         msg: "{{ example_var }}"
 ```
 
+Command:
+```bash
+ansible-playbook Playbook.yml -i inventory.yml
+```
 
 #### 2. In a Separate File (Vars File): 
 
@@ -352,12 +357,21 @@ example_var: "Ansible from vars file!"
 
 Use it in a playbook:
 ```yaml
-- hosts: all
+---
+- name: Variables in a separate file
+  hosts: all
   vars_files:
-    - vars.yml
+    - variables.yml
+
   tasks:
-    - debug:
+    - name: Print variable
+      debug:
         msg: "{{ example_var }}"
+```
+
+Command:
+```bash
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### 3. From the Command Line:
