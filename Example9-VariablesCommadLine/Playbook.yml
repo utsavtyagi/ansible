@@ -1,0 +1,10 @@
+---
+- name: Variables in a separate file
+  hosts: all
+  vars_files:
+    - variables.yml
+
+  tasks:
+    - name: Print variable
+      debug:
+        msg: "{{ example_var }}"

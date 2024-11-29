@@ -379,7 +379,7 @@ ansible-playbook Playbook.yml -i inventory.yml
 Playbook:
 ```yaml
 ---
-- name: Variables in a separate file
+- name: Variables from the command line
   hosts: all
   tasks:
     - name: Print variable
