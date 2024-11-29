@@ -442,5 +442,53 @@ Ansible applies variables based on a precedence hierarchy. Variables defined in 
 3. Play variables
 4. Inventory variables
 
+## 7. Ansible `when` Condition
+
+### Overview
+The `when` condition in Ansible is used to control the execution of tasks based on specific conditions. This allows you to make tasks more dynamic and adaptable. 
+
+The when condition is a powerful feature in Ansible for task control. By using logical operators, variables, and facts, you can create flexible and efficient playbooks.
+
+
+### Syntax
+```yaml
+---
+- name: Example Task
+  command: echo "Hello"
+  when: <condition>
+```
+
+**Examples**
+#### 1. Basic Condition
+Run a task only when a variable equals a specific value.
+```yaml
+---
+- name: Variables from the command line
+  hosts: all
+  vars:
+    var1: "test"
+
+  tasks:
+    - name: Run only if var1 equals "test"
+      debug:
+        msg: "Condition met"
+      when: var1 == "test"
+```
+
+#### 2. Multiple Conditions
+Use and or or for complex conditions.
+
+```yaml
+- name: Run when both conditions are true
+  command: echo "Both Conditions Met"
+  when: var1 == "test" and var2 == "passed"
+
+- name: Run when either condition is true
+  command: echo "At Least One Condition Met"
+  when: var1 == "test" or var2 == "failed"
+
+```
+
+
 ## Conclusion
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.

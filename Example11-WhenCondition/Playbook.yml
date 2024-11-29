@@ -1,0 +1,11 @@
+---
+- name: Variables from the command line
+  hosts: all
+  vars:
+    var1: "test"
+
+  tasks:
+    - name: Run only if var1 equals "test"
+      debug:
+        msg: "Condition met"
+      when: var1 == "test"
