@@ -257,7 +257,6 @@ Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configu
 ### Playbook Example
 ```yaml
 ---
----
 - name: Print the hostname of the Linux server
   hosts: all
   tasks:
@@ -294,6 +293,108 @@ ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1'"
 
 - "MachineGroupName='Group1'" is a extra variables we are passing in command.
 
+
+## 6. Ansible Variables
+**What Are Variables?**
+
+Variables in Ansible are used to store values that can be reused throughout playbooks, making them more flexible and easier to manage. These values can include strings, integers, lists, dictionaries, and more.
+
+**Basic Syntax**
+Ansible variables are defined in YAML and are always referenced using double curly braces ({{ variable_name }}).
+
+**Example:**
+```yaml
+vars:
+  my_variable: "Hello, World!"
+```
+
+**Using a Variable**
+```yaml
+tasks:
+  - name: Print variable
+    debug:
+      msg: "{{ my_variable }}"
+```
+
+### Defining Variables
+
+#### 1. Inside a Playbook:
+```yaml
+- hosts: all
+  vars:
+    example_var: "Ansible is awesome!"
+  tasks:
+    - debug:
+        msg: "{{ example_var }}"
+```
+
+
+#### 2. In a Separate File (Vars File): 
+
+Create vars.yml:
+```yaml
+example_var: "Ansible from vars file!"
+```
+
+Use it in a playbook:
+```yaml
+- hosts: all
+  vars_files:
+    - vars.yml
+  tasks:
+    - debug:
+        msg: "{{ example_var }}"
+```
+
+#### 3. From the Command Line:
+
+```bash
+ansible-playbook playbook.yml --extra-vars "example_var='CLI variable'"
+```
+
+### Types of Ansible Variables
+**Common Types:**
+
+#### 1. String:
+```yaml
+my_string: "Hello"
+```
+
+#### 2. Integer:
+```yaml
+my_number: 123
+```
+
+#### 3. Boolean:
+```yaml
+my_boolean: true
+```
+
+#### 4. List:
+```yaml
+my_list:
+  - item1
+  - item2
+  - item3
+
+```
+
+#### 5. Dictionary:
+```yaml
+my_dict:
+  key1: value1
+  key2: value2
+
+```
+
+### Variable Precedence
+
+Ansible applies variables based on a precedence hierarchy. Variables defined in certain places override others. Here's the order:
+
+1. Extra variables in ansible-playbook command (highest precedence)
+2. Task variables
+3. Play variables
+4. Inventory variables
 
 ## Conclusion
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.
