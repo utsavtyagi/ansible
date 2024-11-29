@@ -376,9 +376,23 @@ ansible-playbook Playbook.yml -i inventory.yml
 
 #### 3. From the Command Line:
 
+Playbook:
+```yaml
+---
+- name: Variables in a separate file
+  hosts: all
+  tasks:
+    - name: Print variable
+      debug:
+        msg: "{{ example_var }}"
+```
+Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml --extra-vars "example_var='CLI variable'"
 ```
+
+OR
 
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml -e "example_var='CLI variable'"
