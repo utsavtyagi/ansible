@@ -1,0 +1,16 @@
+---
+- name: Perform calculations with set_fact
+  hosts: localhost
+  tasks:
+    - name: Set initial values
+      set_fact:
+        number1: 10
+        number2: 20
+
+    - name: Calculate the sum
+      set_fact:
+        sum: "{{ number1 + number2 }}"
+
+    - name: Display the result
+      debug:
+        msg: "The sum is {{ sum }}"

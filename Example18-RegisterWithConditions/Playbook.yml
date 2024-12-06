@@ -1,0 +1,14 @@
+---
+- name: Conditional task based on register
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if a file exists
+      stat:
+        path: /home/utsav.tyagi/file1.txt
+      register: file_check
+
+    - name: Display file status
+      debug:
+        msg: "The file exists!"
+      when: file_check.stat.exists

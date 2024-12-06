@@ -1,0 +1,13 @@
+---
+- name: Capture command output
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Run the hostname command
+      command: hostname
+      register: command_output
+
+    - name: Display the output
+      debug:
+        msg: "The hostname is {{ command_output }}"

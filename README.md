@@ -515,7 +515,78 @@ Use and or or for complex conditions.
         msg: "{{ my_fact }}"
 ```
 
-#### Example 2: Calculations with set_fact
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [Set a fact]
+ok: [localhost]
+
+TASK [Display the fact]
+ok: [localhost] => {
+    "msg": "Hello from set_fact"
+}
+```
+
+
+#### Example 2: Updating a Fact's Value
+
+You can perform calculations or manipulate data with set_fact.
+
+```yaml
+---
+- name: Update a fact's value
+  hosts: localhost
+  tasks:
+    - name: Set initial value
+      set_fact:
+        counter: 5
+
+    - name: Increment the counter
+      set_fact:
+        counter: "{{ counter + 1 }}"
+
+    - name: Multiply the counter
+      set_fact:
+        counter: "{{ counter * 2 }}"
+
+    - name: Display the updated value
+      debug:
+        msg: "The updated counter is {{ counter }}"
+```
+
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [Set initial value] 
+ok: [localhost]
+
+TASK [Display initial value] 
+ok: [localhost] => {
+    "msg": "Initial counter: 5"
+}
+
+TASK [Increment the counter] 
+ok: [localhost]
+
+TASK [Display after increment] 
+ok: [localhost] => {
+    "msg": "Counter after increment: 6"
+}
+
+TASK [Multiply the counter] 
+ok: [localhost]
+
+TASK [Display after multiplication] 
+ok: [localhost] => {
+    "msg": "Counter after multiplication: 24"
+}
+```
+
+#### Example 3: Calculations with set_fact
 
 You can perform calculations or manipulate data with set_fact.
 
@@ -537,22 +608,66 @@ You can perform calculations or manipulate data with set_fact.
         msg: "The sum is {{ sum }}"
 ```
 
-#### Example 3: Conditional Facts
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [Set initial values]
+ok: [localhost]
+
+TASK [Calculate the sum]
+ok: [localhost]
+
+TASK [Display the result]
+ok: [localhost] => {
+    "msg": "The sum is 30"
+}
+```
+
+#### Example 4: Conditional Facts
 Set facts based on conditions.
 
 ```yaml
+---
 - name: Conditional set_fact
   hosts: localhost
+  gather_facts: false
+  vars:
+    environment_name: 'Development'
+
   tasks:
     - name: Set a fact conditionally
       set_fact:
-        environment: "Development"
-      when: ansible_hostname == "dev-server"
+        environment_details: "This is Development environment"
+      when: environment_name == 'Development'
+
+    - name: Set a fact conditionally
+      set_fact:
+        environment_details: "This is Production environment"
+      when: environment_name == 'Production'
 
     - name: Print the environment
       debug:
-        msg: "Environment: {{ environment }}"
+        msg: "Environment: {{ environment_name }}"
+```
 
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+PLAY [Conditional set_fact] 
+
+ok: [localhost]
+
+TASK [Set a fact conditionally] 
+skipping: [localhost]
+
+TASK [Print the environment] 
+ok: [localhost] => {
+    "msg": "Environment: Development"
+}
 ```
 
 ## 9. Understanding `register` in Ansible
@@ -572,6 +687,7 @@ The `register` directive captures the output of a task and stores it in a variab
 ```yaml
 - name: Capture command output
   hosts: localhost
+  gather_facts: false
   tasks:
     - name: Run the hostname command
       command: hostname
@@ -582,64 +698,63 @@ The `register` directive captures the output of a task and stores it in a variab
         msg: "The hostname is {{ command_output.stdout }}"
 ```
 
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
 
-#### Example 2: Register with a Shell Command
-Capture the output of a command and use it.
+```output
+TASK [Run the hostname command] 
+changed: [localhost]
 
-```yaml
-- name: Capture command output
-  hosts: localhost
-  tasks:
-    - name: Run the hostname command
-      command: hostname
-      register: command_output
-
-    - name: Display the output
-      debug:
-        msg: "The hostname is {{ command_output.stdout }}"
+TASK [Display the output] 
+ok: [localhost] => {
+    "msg": "The hostname is {'changed': True, 'stdout': 'VMCCROCKY01', 'stderr': '', 'rc': 0, 'cmd': ['hostname'], 'start': '2024-12-06 12:32:41.347346', 'end': '2024-12-06 12:32:41.350822', 'delta': '0:00:00.003476', 'msg': '', 'stdout_lines': ['VMCCROCKY01'], 'stderr_lines': [], 'failed': False}"
+}
 
 ```
 
-#### Example 3: Using `register` with Conditions
+#### Example 2: Using `register` with Conditions
 
 You can make decisions based on the output captured using register.
 
 ```yaml
+---
 - name: Conditional task based on register
   hosts: localhost
+  gather_facts: false
   tasks:
     - name: Check if a file exists
       stat:
-        path: /tmp/myfile.txt
+        path: /home/utsav.tyagi/file1.txt
       register: file_check
 
     - name: Display file status
       debug:
         msg: "The file exists!"
       when: file_check.stat.exists
-
 ```
 
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
 
-#### Example 4: Registered Data Structure
+```output
+TASK [Check if a file exists] 
+ok: [localhost]
+
+TASK [Display file status] 
+ok: [localhost] => {
+    "msg": "The file exists!"
+}
+```
+
+#### Registered Data Structure
 The variable created by `register` contains the following structure:
  - stdout: Standard output of the command.
  - stderr: Standard error of the command.
  - rc: Return code.
  - changed: Boolean indicating if the task made changes.
 
-```yaml
-- name: Inspect register output
-  hosts: localhost
-  tasks:
-    - name: Run a sample command
-      command: echo "Hello, Ansible!"
-      register: command_info
-
-    - name: Display the entire registered variable
-      debug:
-        var: command_info
-```
 
 
 ## 8. Introduction to `loop` in Ansible
@@ -657,7 +772,6 @@ tasks:
       - item1
       - item2
       - item3
-
 ```
 
 #### Example 1: Installing Multiple features

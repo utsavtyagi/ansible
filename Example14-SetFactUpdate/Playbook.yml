@@ -1,0 +1,33 @@
+---
+- name: Update a fact's value
+  hosts: localhost
+  gather_facts: false
+
+
+  tasks:
+    - name: Clear cached facts
+      meta: clear_facts
+
+    - name: Set initial value
+      set_fact:
+        counter: 5
+
+    - name: Display initial value
+      debug:
+        msg: "Initial counter: {{ counter }}"
+
+    - name: Increment the counter
+      set_fact:
+        counter: "{{ counter + 1 }}"
+
+    - name: Display after increment
+      debug:
+        msg: "Counter after increment: {{ counter }}"
+
+    - name: Multiply the counter
+      set_fact:
+        counter: "{{ (counter | int) * 4 }}"
+
+    - name: Display after multiplication
+      debug:
+        msg: "Counter after multiplication: {{ counter }}"

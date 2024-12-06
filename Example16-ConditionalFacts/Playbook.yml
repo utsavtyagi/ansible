@@ -1,0 +1,21 @@
+---
+- name: Conditional set_fact
+  hosts: localhost
+  gather_facts: false
+  vars:
+    environment_name: 'Development'
+
+  tasks:
+    - name: Set a fact conditionally
+      set_fact:
+        environment_details: "This is Development environment"
+      when: environment_name == 'Development'
+
+    - name: Set a fact conditionally
+      set_fact:
+        environment_details: "This is Production environment"
+      when: environment_name == 'Production'
+
+    - name: Print the environment
+      debug:
+        msg: "Environment: {{ environment_name }}"

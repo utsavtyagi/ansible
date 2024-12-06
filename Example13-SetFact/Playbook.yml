@@ -1,0 +1,12 @@
+---
+- name: Use set_fact to define a variable
+  hosts: localhost
+  tasks:
+    - name: Set a fact
+      set_fact:
+        my_fact: "Hello from set_fact"
+
+    - name: Display the fact
+      debug:
+        msg: "{{ my_fact }}"
+
