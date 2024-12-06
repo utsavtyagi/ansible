@@ -1,0 +1,21 @@
+---
+- name: Loop Example
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: loop without label
+      shell: echo "Processing your request using {{ item }}"
+      loop:
+        - IIS
+        - Apache
+        - Nginx
+
+
+    - name: loop example task
+      shell: echo "Processing your request using {{ item }}"
+      loop:
+        - IIS
+        - Apache
+        - Nginx
+      loop_control: 
+        label: "WebServer: {{ item }}"
