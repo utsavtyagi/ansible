@@ -713,9 +713,9 @@ The `register` directive captures the output of a task and stores it in a variab
 
 ##### Playbook:
 ```yaml
-- name: Define a fact
-  set_fact:
-    variable_name: value
+- name: Run a task and register its output
+  command: your_command_here
+  register: variable_name
 ```
 
 #### Example 1: Capture Command Output
