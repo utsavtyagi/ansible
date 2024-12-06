@@ -489,6 +489,360 @@ Use and or or for complex conditions.
 
 ```
 
+## 8. Understanding `set_fact` in Ansible
+
+### What is `set_fact`?
+`set_fact` is used to create or modify variables dynamically during playbook execution. These variables, known as facts, persist for the duration of the play.
+
+### Syntax for `set_fact`
+```yaml
+- name: Define a fact
+  set_fact:
+    variable_name: value
+```
+
+#### Example 1: Simple Fact Definition
+```yaml
+- name: Use set_fact to define a variable
+  hosts: localhost
+  tasks:
+    - name: Set a fact
+      set_fact:
+        my_fact: "Hello from set_fact"
+
+    - name: Display the fact
+      debug:
+        msg: "{{ my_fact }}"
+```
+
+#### Example 2: Calculations with set_fact
+
+You can perform calculations or manipulate data with set_fact.
+
+```yaml
+- name: Perform calculations with set_fact
+  hosts: localhost
+  tasks:
+    - name: Set initial values
+      set_fact:
+        number1: 10
+        number2: 20
+
+    - name: Calculate the sum
+      set_fact:
+        sum: "{{ number1 + number2 }}"
+
+    - name: Display the result
+      debug:
+        msg: "The sum is {{ sum }}"
+```
+
+#### Example 3: Conditional Facts
+Set facts based on conditions.
+
+```yaml
+- name: Conditional set_fact
+  hosts: localhost
+  tasks:
+    - name: Set a fact conditionally
+      set_fact:
+        environment: "Development"
+      when: ansible_hostname == "dev-server"
+
+    - name: Print the environment
+      debug:
+        msg: "Environment: {{ environment }}"
+
+```
+
+## 9. Understanding `register` in Ansible
+
+### What is `register`?
+The `register` directive captures the output of a task and stores it in a variable. This variable contains detailed information such as stdout, stderr, return code, and more.
+
+### Syntax for `register`
+```yaml
+- name: Define a fact
+  set_fact:
+    variable_name: value
+```
+
+#### Example 1: Capture Command Output
+
+```yaml
+- name: Capture command output
+  hosts: localhost
+  tasks:
+    - name: Run the hostname command
+      command: hostname
+      register: command_output
+
+    - name: Display the output
+      debug:
+        msg: "The hostname is {{ command_output.stdout }}"
+```
+
+
+#### Example 2: Register with a Shell Command
+Capture the output of a command and use it.
+
+```yaml
+- name: Capture command output
+  hosts: localhost
+  tasks:
+    - name: Run the hostname command
+      command: hostname
+      register: command_output
+
+    - name: Display the output
+      debug:
+        msg: "The hostname is {{ command_output.stdout }}"
+
+```
+
+#### Example 3: Using `register` with Conditions
+
+You can make decisions based on the output captured using register.
+
+```yaml
+- name: Conditional task based on register
+  hosts: localhost
+  tasks:
+    - name: Check if a file exists
+      stat:
+        path: /tmp/myfile.txt
+      register: file_check
+
+    - name: Display file status
+      debug:
+        msg: "The file exists!"
+      when: file_check.stat.exists
+
+```
+
+
+#### Example 4: Registered Data Structure
+The variable created by `register` contains the following structure:
+ - stdout: Standard output of the command.
+ - stderr: Standard error of the command.
+ - rc: Return code.
+ - changed: Boolean indicating if the task made changes.
+
+```yaml
+- name: Inspect register output
+  hosts: localhost
+  tasks:
+    - name: Run a sample command
+      command: echo "Hello, Ansible!"
+      register: command_info
+
+    - name: Display the entire registered variable
+      debug:
+        var: command_info
+```
+
+
+## 8. Introduction to `loop` in Ansible
+
+### What is `loop`?
+`Loop` in Ansible allow you to execute a task multiple times with varying inputs. This is useful for repetitive actions like creating files, managing packages, or configuring users.
+
+### Syntax for `loop`
+```yaml
+tasks:
+  - name: Task with a loop
+    <module>:
+      parameter: "{{ item }}"
+    loop:
+      - item1
+      - item2
+      - item3
+
+```
+
+#### Example 1: Installing Multiple features
+
+```yaml
+- name: Install multiple Windows features
+  hosts: windows
+  tasks:
+    - name: Install Windows features
+      win_feature:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - NetFx3
+        - TelnetClient
+```
+
+#### Example 2: Creating Multiple Files
+```yaml
+- name: Create multiple files on Windows
+  hosts: windows
+  tasks:
+    - name: Create files
+      win_file:
+        path: C:\Temp\{{ item }}
+        state: touch
+      loop:
+        - file1.txt
+        - file2.txt
+        - file3.txt
+
+```
+
+#### Example 3: Using Dictionaries in Loop
+You can loop over dictionaries to handle more complex data structures.
+
+```yaml
+- name: Create users with details
+  hosts: localhost
+  tasks:
+    - name: Add users
+      user:
+        name: "{{ item.name }}"
+        state: present
+        shell: "{{ item.shell }}"
+      loop:
+        - name: alice
+          shell: /bin/bash
+        - name: bob
+          shell: /bin/zsh
+```
+
+
+#### Example 4: Registering Output in Loops
+```yaml
+- name: Register outputs for Windows commands
+  hosts: windows
+  tasks:
+    - name: Run commands and register outputs
+      win_shell: echo "Hello {{ item }}"
+      loop:
+        - World
+        - Ansible
+      register: command_output
+
+    - name: Display results
+      debug:
+        msg: "{{ item.stdout }}"
+      loop: "{{ command_output.results }}"
+
+```
+
+
+#### Example 5: Conditional Loop Execution
+```yaml
+- name: Conditional tasks based on Windows loop items
+  hosts: windows
+  tasks:
+    - name: Skip items based on condition
+      win_shell: echo "Processing {{ item }}"
+      loop:
+        - item1
+        - item2
+        - skip_this
+        - item3
+      when: item != "skip_this"
+```
+
+### `label` and `loop_control` in `loop`
+
+The label in loop_control is used to customize the label shown in the output of the task during a playbook run. This makes the output more meaningful and easier to understand, especially when dealing with loops that process multiple items.
+
+
+By default, Ansible shows the `item` being processed in the output. Using `loop_control.label`, you can define a custom label for each loop iteration.
+
+
+#### Key Features of label in loop_control:
+ - Custom Message: It replaces the default item output with a descriptive label.
+ - Dynamic Values: You can use variables like {{ item }} or other contextual data to make the label meaningful.
+ - Improves Readability: Helps in debugging by making the playbook's output more user-friendly.
+
+#### Example with loop_control.label
+
+##### Without label
+```yaml
+- name: Create multiple files
+  win_file:
+    path: C:\Temp\{{ item }}
+    state: touch
+  loop:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+```
+
+
+##### Without `label`
+```yaml
+- name: Create multiple files
+  win_file:
+    path: C:\Temp\{{ item }}
+    state: touch
+  loop:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+```
+
+##### Output:
+```plaintext
+TASK [Create multiple files]
+ok: [localhost] => (item=file1.txt)
+ok: [localhost] => (item=file2.txt)
+ok: [localhost] => (item=file3.txt)
+```
+
+
+##### With `label`
+```yaml
+- name: Create multiple files
+  win_file:
+    path: C:\Temp\{{ item }}
+    state: touch
+  loop:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+  loop_control:
+    label: "Creating file: {{ item }}"
+```
+
+##### Output:
+```plaintext
+TASK [Create multiple files]
+ok: [localhost] => (Creating file: file1.txt)
+ok: [localhost] => (Creating file: file2.txt)
+ok: [localhost] => (Creating file: file3.txt)
+```
+
+#### Example with loop_control.label for Debugging Tasks
+If you're debugging a task with complex operations, you can use `label` to print meaningful information.
+
+```yaml
+- name: Process tasks
+  debug:
+    msg: "Task executed for {{ item }}"
+  loop:
+    - task1
+    - task2
+    - task3
+  loop_control:
+    label: "Processing: {{ item }}"
+
+```
+
+##### Output:
+```plaintext
+TASK [Process tasks]
+ok: [localhost] => (Processing: task1)
+ok: [localhost] => (Processing: task2)
+ok: [localhost] => (Processing: task3)
+
+```
+
+
 
 ## Conclusion
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.
