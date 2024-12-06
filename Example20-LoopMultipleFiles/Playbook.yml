@@ -1,0 +1,12 @@
+- name: Create multiple files on Windows
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Create files
+      win_file:
+        path: C:\Temp\{{ item }}
+        state: touch
+      loop:
+        - file1.txt
+        - file2.txt
+        - file3.txt

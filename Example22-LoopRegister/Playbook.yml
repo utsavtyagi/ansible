@@ -1,0 +1,18 @@
+---
+- name: Register outputs in Loop
+  hosts: localhost
+  gather_facts: false
+  
+  tasks:
+    - name: Run commands and register outputs
+      shell: echo "Hello {{ item }}"
+      loop:
+        - World
+        - Ansible
+        - Doraemon
+      register: command_output
+
+    - name: Display results
+      debug:
+        msg: "{{ item.stdout }}"
+      loop: "{{ command_output.results }}"

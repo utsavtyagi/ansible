@@ -1,0 +1,18 @@
+---
+- name: Website Information
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: loop example task
+      debug:
+        msg: "Website {{ item.name }} - path {{ item.path }} - AppPool {{ item.AppPool }} - User {{ item.User }}"
+      loop:
+        - name: CoreCredit
+          path: D:\WebServer\CoreCredit
+          AppPool: CoreCredit_AppPool
+          User: web_user
+
+        - name: WCF
+          path: D:\WebServer\WCF
+          AppPool: WCF_AppPool
+          User: wcf_user

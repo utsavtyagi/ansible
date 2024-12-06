@@ -774,25 +774,45 @@ tasks:
       - item3
 ```
 
-#### Example 1: Installing Multiple features
+#### Example 1: Loop Example
 
 ```yaml
-- name: Install multiple Windows features
-  hosts: windows
+---
+- name: Loop Example
+  hosts: localhost
+  gather_facts: false
   tasks:
-    - name: Install Windows features
-      win_feature:
-        name: "{{ item }}"
-        state: present
+    - name: loop example task
+      debug:
+        msg: "Watching {{ item }}"
       loop:
-        - NetFx3
-        - TelnetClient
+        - Netflix
+        - Prime
+        - Hotstar
+```
+
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [loop example task] 
+ok: [localhost] => (item=Netflix) => {
+    "msg": "Displaying Netflix"
+}
+ok: [localhost] => (item=Prime) => {
+    "msg": "Displaying Prime"
+}
+ok: [localhost] => (item=Hotstar) => {
+    "msg": "Displaying Hotstar"
+}
 ```
 
 #### Example 2: Creating Multiple Files
 ```yaml
 - name: Create multiple files on Windows
-  hosts: windows
+  hosts: all
+  gather_facts: false
   tasks:
     - name: Create files
       win_file:
@@ -802,46 +822,102 @@ tasks:
         - file1.txt
         - file2.txt
         - file3.txt
+```
 
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [Create files] 
+changed: [CCLABAPP01] => (item=file1.txt)
+changed: [CCLABAPP01] => (item=file2.txt)
+changed: [CCLABAPP01] => (item=file3.txt)
+changed: [CCLABAPP02] => (item=file1.txt)
+changed: [CCLABAPP02] => (item=file2.txt)
+changed: [CCLABAPP02] => (item=file3.txt)
 ```
 
 #### Example 3: Using Dictionaries in Loop
 You can loop over dictionaries to handle more complex data structures.
 
 ```yaml
-- name: Create users with details
+- name: Website Information
   hosts: localhost
+  gather_facts: false
   tasks:
-    - name: Add users
-      user:
-        name: "{{ item.name }}"
-        state: present
-        shell: "{{ item.shell }}"
+    - name: loop example task
+      debug:
+        msg: "Website {{ item.name }} - path {{ item.path }} - AppPool {{ item.AppPool }} - User {{ item.User }}"
       loop:
-        - name: alice
-          shell: /bin/bash
-        - name: bob
-          shell: /bin/zsh
+        - name: CoreCredit
+          path: D:\WebServer\CoreCredit
+          AppPool: CoreCredit_AppPool
+          User: web_user
+
+        - name: WCF
+          path: D:\WebServer\WCF
+          AppPool: WCF_AppPool
+          User: wcf_user
+```
+
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [loop example task] 
+ok: [localhost] => (item={'name': 'CoreCredit', 'path': 'D:\\WebServer\\CoreCredit', 'AppPool': 'CoreCredit_AppPool', 'User': 'web_user'}) => {
+    "msg": "Website CoreCredit - path D:\\WebServer\\CoreCredit - AppPool CoreCredit_AppPool - User web_user"
+}
+ok: [localhost] => (item={'name': 'WCF', 'path': 'D:\\WebServer\\WCF', 'AppPool': 'WCF_AppPool', 'User': 'wcf_user'}) => {
+    "msg": "Website WCF - path D:\\WebServer\\WCF - AppPool WCF_AppPool - User wcf_user"
+}
 ```
 
 
-#### Example 4: Registering Output in Loops
+#### Example 4: Registering Output in Loop
 ```yaml
-- name: Register outputs for Windows commands
-  hosts: windows
+---
+- name: Register outputs in Loop
+  hosts: localhost
+  gather_facts: false
+  
   tasks:
     - name: Run commands and register outputs
-      win_shell: echo "Hello {{ item }}"
+      shell: echo "Hello {{ item }}"
       loop:
         - World
         - Ansible
+        - Doraemon
       register: command_output
 
     - name: Display results
       debug:
         msg: "{{ item.stdout }}"
       loop: "{{ command_output.results }}"
+```
 
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+TASK [Run commands and register outputs] 
+changed: [localhost] => (item=World)
+changed: [localhost] => (item=Ansible)
+changed: [localhost] => (item=Doraemon)
+
+TASK [Display results] 
+ok: [localhost] => (item={'changed': True, 'stdout': 'Hello World', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello World"', 'start': '2024-12-06 13:41:43.393778', 'end': '2024-12-06 13:41:43.397435', 'delta': '0:00:00.003657', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello World"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello World'], 'stderr_lines': [], 'failed': False, 'item': 'World', 'ansible_loop_var': 'item'}) => {
+    "msg": "Hello World"
+}
+ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Ansible', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello Ansible"', 'start': '2024-12-06 13:41:43.671301', 'end': '2024-12-06 13:41:43.674841', 'delta': '0:00:00.003540', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello Ansible"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello Ansible'], 'stderr_lines': [], 'failed': False, 'item': 'Ansible', 'ansible_loop_var': 'item'}) => {
+    "msg": "Hello Ansible"
+}
+ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Doraemon', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello Doraemon"', 'start': '2024-12-06 13:41:44.213032', 'end': '2024-12-06 13:41:44.216680', 'delta': '0:00:00.003648', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello Doraemon"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello Doraemon'], 'stderr_lines': [], 'failed': False, 'item': 'Doraemon', 'ansible_loop_var': 'item'}) => {
+    "msg": "Hello Doraemon"
+}
 ```
 
 
@@ -859,6 +935,15 @@ You can loop over dictionaries to handle more complex data structures.
         - item3
       when: item != "skip_this"
 ```
+
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+```output
+
+```
+
 
 ### `label` and `loop_control` in `loop`
 
