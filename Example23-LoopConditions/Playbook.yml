@@ -1,0 +1,14 @@
+---
+- name: Conditional tasks based on loop items
+  hosts: CCLABAPP01
+  gather_facts: false
+  
+  tasks:
+    - name: Skip items based on condition
+      win_shell: echo "Processing {{ item }}"
+      loop:
+        - item1
+        - item2
+        - skip_this
+        - item3
+      when: item != "skip_this"

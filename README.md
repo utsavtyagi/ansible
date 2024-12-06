@@ -923,8 +923,11 @@ ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Doraemon', 'stderr':
 
 #### Example 5: Conditional Loop Execution
 ```yaml
-- name: Conditional tasks based on Windows loop items
-  hosts: windows
+---
+- name: Conditional tasks based on loop items
+  hosts: CCLABAPP01
+  gather_facts: false
+  
   tasks:
     - name: Skip items based on condition
       win_shell: echo "Processing {{ item }}"
@@ -941,7 +944,11 @@ ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Doraemon', 'stderr':
 ```
 
 ```output
-
+TASK [Skip items based on condition] 
+changed: [CCLABAPP01] => (item=item1)
+changed: [CCLABAPP01] => (item=item2)
+skipping: [CCLABAPP01] => (item=skip_this)
+changed: [CCLABAPP01] => (item=item3)
 ```
 
 
