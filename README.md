@@ -1078,6 +1078,8 @@ changed: [localhost] => (item=WebServer: Nginx)
 
 Ansible provides a variety of modules specifically designed for managing systems. These modules allow administrators to perform tasks like installing software, managing services, handling files, and running PowerShell commands efficiently.
 
+https://docs.ansible.com/ansible/latest/collections/ansible/windows/index.html#plugins-in-ansible-windows
+
 Here’s a comprehensive tutorial on common Windows-specific Ansible modules with practical examples.
 
 ---
