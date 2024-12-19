@@ -1420,7 +1420,7 @@ The `win_reboot` module reboots a Windows host and waits for it to come back onl
   tasks:
     - name: Reboot the server
       win_reboot:
-        timeout: 600
+        reboot_timeout: 600
       register: result
 
     - name: Display the Result
