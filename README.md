@@ -1435,6 +1435,29 @@ The `win_reboot` module reboots a Windows host and waits for it to come back onl
 
 #### Output:
 ```output
+TASK [Reboot the server] 
+changed: [CCLABAPP02]
+changed: [CCLABAPP01]
+
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result": {
+        "changed": true,
+        "elapsed": 36,
+        "failed": false,
+        "rebooted": true,
+        "unreachable": false
+    }
+}
+ok: [CCLABAPP02] => {
+    "result": {
+        "changed": true,
+        "elapsed": 26,
+        "failed": false,
+        "rebooted": true,
+        "unreachable": false
+    }
+}
 
 ```
 
