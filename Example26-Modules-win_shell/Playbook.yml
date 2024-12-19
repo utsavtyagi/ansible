@@ -1,0 +1,12 @@
+---
+- name: Run a PowerShell Command Windows 
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Test the Connection
+      win_shell: Test-NetConnection -ComputerName localhost -port 80
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout

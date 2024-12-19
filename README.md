@@ -1089,10 +1089,16 @@ The `win_command` module runs arbitrary commands on Windows hosts without using 
 ```yaml
 ---
 - name: Run a command on a Windows host
-  hosts: windows
+  hosts: all
+  gather_facts: false
   tasks:
     - name: Display the Windows hostname
       win_command: hostname
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout
 ```
 
 #### Command:
@@ -1102,6 +1108,17 @@ The `win_command` module runs arbitrary commands on Windows hosts without using 
 
 #### Output:
 ```output
+TASK [Display the Windows hostname] 
+changed: [CCLABAPP01]
+changed: [CCLABAPP02]
+
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result.stdout": "cclabapp01\r\n"
+}
+ok: [CCLABAPP02] => {
+    "result.stdout": "cclabapp02\r\n"
+}
 
 ```
 
@@ -1113,13 +1130,17 @@ The `win_shell` module runs commands in a Windows shell, allowing for more compl
 **Example: Run a Batch Script**
 ```yaml
 ---
-- name: Execute a batch script on Windows
-  hosts: windows
+- name: Run a PowerShell Command 
+  hosts: all
+  gather_facts: false
   tasks:
-    - name: Run a batch script
-      win_shell: |
-        echo "Running Batch Script"
-        dir C:\
+    - name: Test the Connection
+      win_shell: Test-NetConnection -ComputerName localhost -port 80
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout
 ```
 
 #### Command:
@@ -1129,7 +1150,17 @@ The `win_shell` module runs commands in a Windows shell, allowing for more compl
 
 #### Output:
 ```output
+TASK [Test the Connection] 
+changed: [CCLABAPP01]
+changed: [CCLABAPP02]
 
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result.stdout": "\r\n\r\nComputerName     : localhost\r\nRemoteAddress    : ::1\r\nRemotePort       : 80\r\nInterfaceAlias   : Loopback Pseudo-Interface 1\r\nSourceAddress    : ::1\r\nTcpTestSucceeded : True\r\n\r\n\r\n\r\n"
+}
+ok: [CCLABAPP02] => {
+    "result.stdout": "\r\n\r\nComputerName           : localhost\r\nRemoteAddress          : ::1\r\nRemotePort             : 80\r\nInterfaceAlias         : Loopback Pseudo-Interface 1\r\nSourceAddress          : ::1\r\nPingSucceeded          : True\r\nPingReplyDetails (RTT) : 0 ms\r\nTcpTestSucceeded       : False\r\n\r\n\r\n\r\n"
+}
 ```
 
 ---

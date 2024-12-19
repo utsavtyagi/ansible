@@ -1,0 +1,12 @@
+---
+- name: Run a command on a Windows host
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Display the Windows hostname
+      win_command: hostname
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout
