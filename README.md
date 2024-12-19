@@ -1074,6 +1074,206 @@ changed: [localhost] => (item=WebServer: Nginx)
 ```
 
 
+## 9. Ansible `Modules`
+
+Ansible provides a variety of modules specifically designed for managing systems. These modules allow administrators to perform tasks like installing software, managing services, handling files, and running PowerShell commands efficiently.
+
+Here’s a comprehensive tutorial on common Windows-specific Ansible modules with practical examples.
+
+---
+
+### **1. `win_command`: Running Windows Commands**
+The `win_command` module runs arbitrary commands on Windows hosts without using a shell.
+
+**Example: Running a Simple Command**
+```yaml
+---
+- name: Run a command on a Windows host
+  hosts: windows
+  tasks:
+    - name: Display the Windows hostname
+      win_command: hostname
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **2. `win_shell`: Executing Commands in a Shell**
+The `win_shell` module runs commands in a Windows shell, allowing for more complex command execution.
+
+**Example: Run a Batch Script**
+```yaml
+---
+- name: Execute a batch script on Windows
+  hosts: windows
+  tasks:
+    - name: Run a batch script
+      win_shell: |
+        echo "Running Batch Script"
+        dir C:\
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **3. `win_service`: Managing Windows Services**
+The `win_service` module starts, stops, restarts, or ensures the state of a Windows service.
+
+**Example: Ensure the Windows Update Service is Running**
+```yaml
+---
+- name: Manage Windows services
+  hosts: windows
+  tasks:
+    - name: Start Windows Update service
+      win_service:
+        name: wuauserv
+        state: started
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **4. `win_package`: Installing or Removing Software**
+The `win_package` module handles installation or removal of software on Windows.
+
+**Example: Install Software Using MSI**
+```yaml
+---
+- name: Install software using win_package
+  hosts: windows
+  tasks:
+    - name: Install Google Chrome
+      win_package:
+        path: "C:\\Temp\\GoogleChromeStandaloneEnterprise.msi"
+        state: present
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **5. `win_copy`: Copying Files to Windows Hosts**
+The `win_copy` module copies files or directories from the Ansible control machine to Windows hosts.
+
+**Example: Copy a File to a Windows Host**
+```yaml
+---
+- name: Copy a file to a Windows host
+  hosts: windows
+  tasks:
+    - name: Copy a configuration file
+      win_copy:
+        src: /path/to/local/file.txt
+        dest: C:\Temp\file.txt
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **6. `win_file`: Managing File and Directory States**
+The `win_file` module manages file and directory permissions, creation, and deletion.
+
+**Example: Create a Directory**
+```yaml
+---
+- name: Create a directory on a Windows host
+  hosts: windows
+  tasks:
+    - name: Ensure directory exists
+      win_file:
+        path: C:\Temp\NewDirectory
+        state: directory
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+### **7. `win_reboot`: Rebooting a Windows Host**
+The `win_reboot` module reboots a Windows host and waits for it to come back online.
+
+**Example: Reboot After a Task**
+```yaml
+---
+- name: Reboot a Windows host
+  hosts: windows
+  tasks:
+    - name: Install updates and reboot
+      win_updates:
+        category_names:
+          - SecurityUpdates
+
+    - name: Reboot the server
+      win_reboot:
+        timeout: 600
+```
+
+#### Command:
+```bash
+ ansible-playbook Playbook.yml -i inventory.yml
+```
+
+#### Output:
+```output
+
+```
+
+---
+
+
 
 ## Conclusion
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.
