@@ -1,5 +1,24 @@
 ![image](https://github.com/user-attachments/assets/6113bcf7-d75e-45b0-965a-9f71a7a228e6)
 
+---
+
+# ASP.NET Core Detailed Guide with Examples
+
+## Table of Contents
+1. [Introduction to Ansible](#1-introduction-to-ansible)
+2. [Installation](#2-installation)
+3. [Understanding YAML](#3-understanding-yaml)
+4. [Ansible Inventory](#4-ansible-inventory)
+5. [Ansible Playbooks](#5-ansible-playbooks)
+6. [Ansible Variables](#6-ansible-variables)
+7. [Ansible `when` Condition](#7-ansible-when-condition)
+8. [Understanding `set_fact` in Ansible](#8-understanding-set_fact-in-ansible)
+9. [Understanding `register` in Ansible](#9-understanding-register-in-ansible)
+10. [Introduction to `loop` in Ansible](#10-introduction-to-loop-in-ansible)
+11. [Ansible `Modules`](#11-ansible-modules)
+
+---
+
 # Ansible
 
 ## 1. Introduction to Ansible
@@ -799,7 +818,7 @@ The variable created by `register` contains the following structure:
 
 
 
-## 8. Introduction to `loop` in Ansible
+## 10. Introduction to `loop` in Ansible
 
 ### What is `loop`?
 `Loop` in Ansible allow you to execute a task multiple times with varying inputs. This is useful for repetitive actions like creating files, managing packages, or configuring users.
@@ -1074,7 +1093,7 @@ changed: [localhost] => (item=WebServer: Nginx)
 ```
 
 
-## 9. Ansible `Modules`
+## 11. Ansible `Modules`
 
 Ansible provides a variety of modules specifically designed for managing systems. These modules allow administrators to perform tasks like installing software, managing services, handling files, and running PowerShell commands efficiently.
 
