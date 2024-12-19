@@ -1,0 +1,14 @@
+---
+- name: Run a PowerShell Command Windows 
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Start Windows Update service
+      win_service:
+        name: wuauserv
+        state: started
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result

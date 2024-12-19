@@ -1,0 +1,14 @@
+---
+- name: Install software using win_package
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Install Google Chrome
+      win_package:
+        path: "C:\\Temp\\ChromeStandaloneSetup64.exe"
+        state: present
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result

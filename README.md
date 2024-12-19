@@ -1171,13 +1171,19 @@ The `win_service` module starts, stops, restarts, or ensures the state of a Wind
 **Example: Ensure the Windows Update Service is Running**
 ```yaml
 ---
-- name: Manage Windows services
-  hosts: windows
+- name: Run a PowerShell Command Windows 
+  hosts: all
+  gather_facts: false
   tasks:
     - name: Start Windows Update service
       win_service:
         name: wuauserv
         state: started
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result.stdout
 ```
 
 #### Command:
@@ -1187,6 +1193,51 @@ The `win_service` module starts, stops, restarts, or ensures the state of a Wind
 
 #### Output:
 ```output
+TASK [Start Windows Update service] 
+ok: [CCLABAPP01]
+ok: [CCLABAPP02]
+
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result": {
+        "can_pause_and_continue": false,
+        "changed": false,
+        "depended_by": [],
+        "dependencies": [
+            "rpcss"
+        ],
+        "description": "Enables the detection, download, and installation of updates for Windows and other programs. If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature, and programs will not be able to use the Windows Update Agent (WUA) API.",
+        "desktop_interact": false,
+        "display_name": "wuauserv",
+        "exists": true,
+        "failed": false,
+        "name": "wuauserv",
+        "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+        "start_mode": "auto",
+        "state": "running",
+        "username": "LocalSystem"
+    }
+}
+ok: [CCLABAPP02] => {
+    "result": {
+        "can_pause_and_continue": false,
+        "changed": false,
+        "depended_by": [],
+        "dependencies": [
+            "rpcss"
+        ],
+        "description": "Enables the detection, download, and installation of updates for Windows and other programs. If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature, and programs will not be able to use the Windows Update Agent (WUA) API.",
+        "desktop_interact": false,
+        "display_name": "Windows Update",
+        "exists": true,
+        "failed": false,
+        "name": "wuauserv",
+        "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+        "start_mode": "auto",
+        "state": "running",
+        "username": "LocalSystem"
+    }
+}
 
 ```
 
@@ -1195,16 +1246,22 @@ The `win_service` module starts, stops, restarts, or ensures the state of a Wind
 ### **4. `win_package`: Installing or Removing Software**
 The `win_package` module handles installation or removal of software on Windows.
 
-**Example: Install Software Using MSI**
+**Example: Install Software**
 ```yaml
 ---
 - name: Install software using win_package
-  hosts: windows
+  hosts: all
+  gather_facts: false
   tasks:
     - name: Install Google Chrome
       win_package:
-        path: "C:\\Temp\\GoogleChromeStandaloneEnterprise.msi"
+        path: "C:\\Temp\\ChromeStandaloneSetup64.exe"
         state: present
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result
 ```
 
 #### Command:
@@ -1216,7 +1273,27 @@ The `win_package` module handles installation or removal of software on Windows.
 ```output
 
 ```
+TASK [Install Google Chrome] 
+changed: [CCLABAPP02]
+changed: [CCLABAPP01]
 
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result": {
+        "changed": true,
+        "failed": false,
+        "rc": 0,
+        "reboot_required": false
+    }
+}
+ok: [CCLABAPP02] => {
+    "result": {
+        "changed": true,
+        "failed": false,
+        "rc": 0,
+        "reboot_required": false
+    }
+}
 ---
 
 ### **5. `win_copy`: Copying Files to Windows Hosts**
