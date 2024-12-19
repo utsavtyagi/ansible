@@ -1303,12 +1303,19 @@ The `win_copy` module copies files or directories from the Ansible control machi
 ```yaml
 ---
 - name: Copy a file to a Windows host
-  hosts: windows
+  hosts: all
+  gather_facts: false
   tasks:
-    - name: Copy a configuration file
+    - name: Copy a file
       win_copy:
-        src: /path/to/local/file.txt
-        dest: C:\Temp\file.txt
+        src: /home/utsav.tyagi/ChromeStandaloneSetup64.exe
+        dest: C:\Temp\ChromeStandaloneSetup64.exe
+        remote_src: false
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result
 ```
 
 #### Command:
@@ -1318,24 +1325,58 @@ The `win_copy` module copies files or directories from the Ansible control machi
 
 #### Output:
 ```output
+TASK [Copy a file] 
+ok: [CCLABAPP01]
+changed: [CCLABAPP02]
 
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result": {
+        "changed": false,
+        "checksum": "cf28c050fd21ad09de542ce51cbfa9b8f4609070",
+        "dest": "C:\\Temp\\ChromeStandaloneSetup64.exe",
+        "failed": false,
+        "operation": "file_copy",
+        "original_basename": "ChromeStandaloneSetup64.exe",
+        "size": 126284672,
+        "src": "/home/utsav.tyagi/ChromeStandaloneSetup64.exe"
+    }
+}
+ok: [CCLABAPP02] => {
+    "result": {
+        "changed": true,
+        "checksum": "cf28c050fd21ad09de542ce51cbfa9b8f4609070",
+        "dest": "C:\\Temp\\ChromeStandaloneSetup64.exe",
+        "failed": false,
+        "operation": "file_copy",
+        "original_basename": "ChromeStandaloneSetup64.exe",
+        "size": 126284672,
+        "src": "/home/utsav.tyagi/ChromeStandaloneSetup64.exe"
+    }
+}
 ```
 
 ---
 
 ### **6. `win_file`: Managing File and Directory States**
-The `win_file` module manages file and directory permissions, creation, and deletion.
+The `win_file` module manages file and directory creation, and deletion.
 
 **Example: Create a Directory**
 ```yaml
 ---
 - name: Create a directory on a Windows host
-  hosts: windows
+  hosts: all
+  gather_facts: false
   tasks:
     - name: Ensure directory exists
       win_file:
         path: C:\Temp\NewDirectory
         state: directory
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result
 ```
 
 #### Command:
@@ -1345,6 +1386,23 @@ The `win_file` module manages file and directory permissions, creation, and dele
 
 #### Output:
 ```output
+TASK [Ensure directory exists] 
+changed: [CCLABAPP01]
+changed: [CCLABAPP02]
+
+TASK [Display the Result] 
+ok: [CCLABAPP01] => {
+    "result": {
+        "changed": true,
+        "failed": false
+    }
+}
+ok: [CCLABAPP02] => {
+    "result": {
+        "changed": true,
+        "failed": false
+    }
+}
 
 ```
 
@@ -1353,20 +1411,21 @@ The `win_file` module manages file and directory permissions, creation, and dele
 ### **7. `win_reboot`: Rebooting a Windows Host**
 The `win_reboot` module reboots a Windows host and waits for it to come back online.
 
-**Example: Reboot After a Task**
+**Example: Reboot**
 ```yaml
 ---
-- name: Reboot a Windows host
-  hosts: windows
+- name: Reboot Windows host
+  hosts: all
+  gather_facts: false
   tasks:
-    - name: Install updates and reboot
-      win_updates:
-        category_names:
-          - SecurityUpdates
-
     - name: Reboot the server
       win_reboot:
         timeout: 600
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result
 ```
 
 #### Command:

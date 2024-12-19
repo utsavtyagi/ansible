@@ -1,0 +1,14 @@
+---
+- name: Create a directory on a Windows host
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Ensure directory exists
+      win_file:
+        path: C:\Temp\NewDirectory
+        state: directory
+      register: result
+
+    - name: Display the Result
+      debug:
+        var: result
