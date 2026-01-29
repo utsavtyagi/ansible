@@ -150,10 +150,14 @@ Flower: Lotus
 ```
 ```yaml
 ---
-app_name: CoreCreditAPI
-app_port: 8080
+app_name: CoreCredit
+app_port: 443
 environment: Production
 ```
+Used for simple configuration settings (app name, port, environment).
+Values can be string, number, boolean.
+Keys must be unique.
+Common in application config files and Ansible variables.
 
 #### Array/List
 ```yaml
@@ -186,6 +190,10 @@ packages:
   - docker
   - git
 ```
+Used to store multiple items of the same type.
+Order matters in lists.
+Each item starts with -.
+Commonly used for servers, packages, users, IPs.
 
 #### Dictionary/Map
 ```yaml
@@ -213,13 +221,12 @@ database:
   server: sqlprod01
   port: 1433
   name: CoreCreditDB
-  username: dbuser
-  password: StrongPassword123
-
-logging:
-  level: INFO
-  path: /var/log/corecredit/app.log
 ```
+
+Stores key-value pairs inside a parent object.
+Used for structured configurations like database settings.
+Keys inside a dictionary must be unique.
+Dictionaries are unordered.
 
 #### List of dictionaries
 ```yaml
@@ -246,34 +253,18 @@ Fruits:
 ---
 websites:
   - name: CoreCredit
-    path: /var/www/corecredit
     port: 8080
     app_pool: CoreCredit_AppPool
 
   - name: WCFService
-    path: /var/www/wcf
     port: 9090
     app_pool: WCF_AppPool
 ```
 
-```yaml
----
-environments:
-  dev:
-    url: https://dev.api.corecredit.com
-    replicas: 1
-    logging: DEBUG
-
-  qa:
-    url: https://qa.api.corecredit.com
-    replicas: 2
-    logging: INFO
-
-  prod:
-    url: https://api.corecredit.com
-    replicas: 5
-    logging: ERROR
-```
+Used when each item has multiple properties.
+Very common in DevOps and Ansible for websites, services, users, containers.
+Each list item is a dictionary with multiple keys.
+Ideal for defining complex configurations in a structured way.
 
 ### Key Points
 - Indentation matters.
