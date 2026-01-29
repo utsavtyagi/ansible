@@ -148,6 +148,12 @@ Fruit: Mango
 Vegetable: Tomato
 Flower: Lotus
 ```
+```yaml
+---
+app_name: CoreCreditAPI
+app_port: 8080
+environment: Production
+```
 
 #### Array/List
 ```yaml
@@ -168,6 +174,19 @@ Flowers:
   - Lily
 ```
 
+```yaml
+---
+servers:
+  - appserver01
+  - appserver02
+  - dbserver01
+
+packages:
+  - nginx
+  - docker
+  - git
+```
+
 #### Dictionary/Map
 ```yaml
 ---
@@ -186,6 +205,20 @@ Banana:
   Fat: 0.3 g
   Carbs: 27 g
 
+```
+
+```yaml
+---
+database:
+  server: sqlprod01
+  port: 1433
+  name: CoreCreditDB
+  username: dbuser
+  password: StrongPassword123
+
+logging:
+  level: INFO
+  path: /var/log/corecredit/app.log
 ```
 
 #### List of dictionaries
@@ -209,6 +242,38 @@ Fruits:
 
 ```
 
+```yaml
+---
+websites:
+  - name: CoreCredit
+    path: /var/www/corecredit
+    port: 8080
+    app_pool: CoreCredit_AppPool
+
+  - name: WCFService
+    path: /var/www/wcf
+    port: 9090
+    app_pool: WCF_AppPool
+```
+
+```yaml
+---
+environments:
+  dev:
+    url: https://dev.api.corecredit.com
+    replicas: 1
+    logging: DEBUG
+
+  qa:
+    url: https://qa.api.corecredit.com
+    replicas: 2
+    logging: INFO
+
+  prod:
+    url: https://api.corecredit.com
+    replicas: 5
+    logging: ERROR
+```
 
 ### Key Points
 - Indentation matters.
