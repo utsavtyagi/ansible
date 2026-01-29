@@ -120,13 +120,18 @@ Check the installed version of Ansible to confirm the setup and run basic comman
 ```bash
 ansible --version
 ```
+Shows the full path of the ansible command executable.
 ```bash
 which ansible
 ```
+Shows the full path of the ansible-playbook command executable.
 ```bash
 which ansible-playbook
 ```
-
+Tests if Ansible can connect and run modules on the local machine
+```bash
+ansible localhost -m ping
+```bash
 
 ## 3. Understanding YAML
 
