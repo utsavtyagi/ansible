@@ -41,7 +41,7 @@ Ansible's design focuses on the following principles:
 
 Ansible can be installed on:
 
-**Linux**: This is the most common environment for Ansible. It works on various Linux distributions like Ubuntu, CentOS, Fedora, and Red Hat Enterprise Linux (RHEL).
+**Linux**: This is the most common environment for Ansible. It works on various Linux distributions like Ubuntu, CentOS, Fedora, Rocky, and Red Hat Enterprise Linux (RHEL).
 
 **macOS**: Ansible can be installed on macOS using Homebrew or pip (Python's package manager).
 
