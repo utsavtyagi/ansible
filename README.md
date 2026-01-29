@@ -2,7 +2,17 @@
 
 ---
 
-# ASP.NET Core Detailed Guide with Examples
+# Ansible Detailed Guide with Examples
+
+## Who This Guide Is For
+This guide is for beginners who want to learn Ansible from scratch with practical examples.
+
+## What You Will Learn
+- How Ansible works
+- How to install and configure Ansible
+- Writing playbooks and inventories
+- Variables, loops, conditions
+- Windows automation using Ansible
 
 ## Table of Contents
 1. [Introduction to Ansible](#1-introduction-to-ansible)
@@ -65,10 +75,13 @@ Network devices (e.g., Cisco, Juniper, Arista switches)
 
 In summary, while the Ansible control node is typically installed on a Unix-like environment (Linux or macOS), it can manage both Unix/Linux and Windows systems, providing flexibility in automation across different platforms.
 
+**Control Node** : The machine where Ansible is installed and executed.
+**Managed Nodes** : The machines that Ansible manages. These do not need Ansible installed.
+
 
 **Ansible Installation Steps**
 
-Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., CentOS, RHEL, Fedora).
+Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., Rocky, CentOS, RHEL, Fedora).
 
 Step 1: Install EPEL (Extra Packages for Enterprise Linux) Repository
 
@@ -140,7 +153,7 @@ Vegetables:
   - Potato
 
 Flowers:
-  - Lotis
+  - Lotus
   - Rose
   - Lily
 ```
