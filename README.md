@@ -94,7 +94,7 @@ sudo dnf install epel-release -y
 Step 2: Install Ansible (After enabling EPEL, install Ansible.)
 
 ```bash
-sudo dnf install ansible -y
+sudo dnf install ansible-core -y
 ```
 
 Step 3: Install Python Package Manager (pip)
@@ -115,12 +115,17 @@ sudo pip install pywinrm
 
 Verify Ansible Installation
 
-Check the installed version of Ansible to confirm the setup.
+Check the installed version of Ansible to confirm the setup and run basic commands.
 
 ```bash
 ansible --version
 ```
-
+```bash
+which ansible
+```
+```bash
+which ansible-playbook
+```
 
 
 ## 3. Understanding YAML
