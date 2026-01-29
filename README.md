@@ -131,7 +131,7 @@ which ansible-playbook
 Tests if Ansible can connect and run modules on the local machine
 ```bash
 ansible localhost -m ping
-```bash
+```
 
 ## 3. Understanding YAML
 
