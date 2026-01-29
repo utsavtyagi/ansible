@@ -2,10 +2,7 @@
 
 ---
 
-# Ansible Detailed Guide with Examples
-
-## Who This Guide Is For
-This guide is for beginners who want to learn Ansible from scratch with practical examples.
+# Ansible
 
 ## What You Will Learn
 - How Ansible works
