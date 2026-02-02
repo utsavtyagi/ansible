@@ -113,46 +113,69 @@ Tests if Ansible can connect and run modules on the local machine
 ```bash
 ansible localhost -m ping
 ```
+---
+### Install Required Packages
 
-**Install Packages**
+#### 1. Install `sshpass`
 
-To use the 'ssh' connection type with passwords
+Required to use the **SSH connection type with password authentication**.
+
 ```bash
-sudo dnf install sshpass
+sudo dnf install -y sshpass
 ```
 
+---
 
-Install Python Package Manager (pip)
+### 2. Install Python Package Manager (`pip`)
+
+Python’s package manager is required to install additional Python modules such as `pywinrm`.
+
 ```bash
-sudo dnf install python3-pip -y
+sudo dnf install -y python3-pip
 ```
-Python's package manager is required to install additional Python modules like pywinrm for managing Windows systems.
 
+---
 
+#### 3. Install `pywinrm`
 
-Install pywinrm Using pip
+The `pywinrm` module enables **Ansible to communicate with Windows hosts** using **WinRM (Windows Remote Management)**.
+
 ```bash
 sudo pip install pywinrm
 ```
-The pywinrm module allows Ansible to communicate with Windows hosts via WinRM (Windows Remote Management).
 
+> 💡 Alternatively, you may use `pip3` if required:
+>
+> ```bash
+> sudo pip3 install pywinrm
+> ```
 
+---
 
-Install packages for Kerberos
+#### 4. Install Kerberos Dependencies
+
+These packages are required for **Kerberos-based authentication** with WinRM.
+
 ```bash
 sudo dnf install -y \
-krb5-workstation \
-python3-requests-kerberos \
-python3-gssapi \
-gcc \
-python3-devel \
-krb5-devel
+  krb5-workstation \
+  python3-requests-kerberos \
+  python3-gssapi \
+  gcc \
+  python3-devel \
+  krb5-devel
 ```
 
+---
+
+#### 5. Install `pykerberos`
+
+`pykerberos` provides Kerberos support for Python-based authentication.
 
 ```bash
 python3 -m pip install --user pykerberos
 ```
+---
 
 ## 3. Understanding YAML
 
