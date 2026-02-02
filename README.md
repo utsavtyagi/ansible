@@ -94,22 +94,6 @@ Step 2: Install Ansible (After enabling EPEL, install Ansible.)
 sudo dnf install ansible-core -y
 ```
 
-Step 3: Install Python Package Manager (pip)
-
-Python's package manager is required to install additional Python modules like pywinrm for managing Windows systems.
-
-```bash
-sudo dnf install python3-pip -y
-```
-
-Step 4: Install pywinrm Using pip
-
-The pywinrm module allows Ansible to communicate with Windows hosts via WinRM (Windows Remote Management).
-
-```bash
-sudo pip install pywinrm
-```
-
 Verify Ansible Installation
 
 Check the installed version of Ansible to confirm the setup and run basic commands.
@@ -128,6 +112,46 @@ which ansible-playbook
 Tests if Ansible can connect and run modules on the local machine
 ```bash
 ansible localhost -m ping
+```
+
+**Install Packages**
+
+To use the 'ssh' connection type with passwords
+```bash
+sudo dnf install sshpass
+```
+
+
+Install Python Package Manager (pip)
+```bash
+sudo dnf install python3-pip -y
+```
+Python's package manager is required to install additional Python modules like pywinrm for managing Windows systems.
+
+
+
+Install pywinrm Using pip
+```bash
+sudo pip install pywinrm
+```
+The pywinrm module allows Ansible to communicate with Windows hosts via WinRM (Windows Remote Management).
+
+
+
+Install packages for Kerberos
+```bash
+sudo dnf install -y \
+krb5-workstation \
+python3-requests-kerberos \
+python3-gssapi \
+gcc \
+python3-devel \
+krb5-devel
+```
+
+
+```bash
+python3 -m pip install --user pykerberos
 ```
 
 ## 3. Understanding YAML
