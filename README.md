@@ -177,6 +177,11 @@ python3 -m pip install --user pykerberos
 ```
 ---
 
+
+#### 6. Configure WinRM on Windows Servers
+https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+
+
 ## 3. Understanding YAML
 
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
