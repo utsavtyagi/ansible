@@ -180,6 +180,7 @@ python3 -m pip install --user pykerberos
 
 #### 6. Configure WinRM on Windows Servers
 https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+---
 
 
 ## 3. Understanding YAML
