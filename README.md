@@ -178,7 +178,18 @@ python3 -m pip install --user pykerberos
 ---
 
 
-#### 6. Configure WinRM on Windows Servers
+#### 6.Install Windows collection
+```bash
+ansible-galaxy collection install ansible.windows
+```
+
+Verify:
+```bash
+ansible-galaxy collection list | grep ansible.windows
+```
+---
+
+#### 7. Configure WinRM on Windows Servers
 
 Run the official Ansible PowerShell script on each Windows target to enable and configure WinRM:
 
@@ -189,7 +200,7 @@ Run the official Ansible PowerShell script on each Windows target to enable and 
 
 ---
 
-#### 7. Configure Target Linux Servers - Configure SSH Key-Based Authentication
+#### 8. Configure Target Linux Servers - Configure SSH Key-Based Authentication
 
 **Create a Dedicated Ansible User**
 
