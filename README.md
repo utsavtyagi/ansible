@@ -179,9 +179,97 @@ python3 -m pip install --user pykerberos
 
 
 #### 6. Configure WinRM on Windows Servers
-https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+
+Run the official Ansible PowerShell script on each Windows target to enable and configure WinRM:
+
+🔗 **ConfigureRemotingForAnsible.ps1**
+[https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+
+> This script configures WinRM, firewall rules, and required settings for Ansible connectivity.
 
 ---
+
+#### 7. Configure Target Linux Servers - Configure SSH Key-Based Authentication
+
+**Create a Dedicated Ansible User**
+
+Run the following commands on each target Linux server:
+
+```bash
+sudo useradd ansibleuser
+sudo passwd ansibleuser
+```
+
+---
+
+**Configure Passwordless Sudo**
+
+Edit the sudoers file:
+
+```bash
+sudo visudo
+```
+
+Add the following entry:
+
+```text
+ansibleuser ALL=(ALL) NOPASSWD: ALL
+```
+
+---
+
+**Do **NOT** Add User to `wheel` Group**
+
+Avoid granting broad administrative privileges via the `wheel` group.
+
+```bash
+# If added earlier, remove ansibleuser from wheel
+sudo gpasswd -d ansibleuser wheel
+```
+
+> ⚠️ Do not run:
+>
+> ```bash
+> sudo usermod -aG wheel ansibleuser
+> ```
+
+---
+
+**Generate SSH Key Pair (On Control Node)**
+
+```bash
+ssh-keygen -t rsa -b 4096
+```
+
+This generates:
+
+* **Private Key:** `/home/utsavtyagi/.ssh/id_rsa` (keep secure)
+* **Public Key:** `/home/utsavtyagi/.ssh/id_rsa.pub` (copy to target servers)
+
+---
+
+#### Copy Public Key to Target Servers
+
+```bash
+ssh-copy-id ansibleuser@172.16.1.210
+```
+
+> Repeat for all target servers.
+
+---
+
+### Verification
+
+Test passwordless SSH access:
+
+```bash
+ssh ansibleuser@TargetedLinuxServer
+```
+
+Login should succeed **without prompting for a password**.
+
+---
+
 
 
 ## 3. Understanding YAML
