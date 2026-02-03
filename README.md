@@ -534,7 +534,11 @@ ansible-playbook Playbook.yml -i inventory.yml
 ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1'"
 ```
 
-- "MachineGroupName='Group1'" is a extra variables we are passing in command.
+```bash
+ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1, Group2'"
+```
+
+- "Group" is a extra variables we are passing in command.
 
 
 ## 6. Ansible Variables
