@@ -1197,7 +1197,7 @@ ok: [localhost] => (item={'name': 'WCF', 'path': 'D:\\WebServer\\WCF', 'AppPool'
       loop:
         - World
         - Ansible
-        - Doraemon
+        - Linux
       register: command_output
 
     - name: Display results
@@ -1216,7 +1216,7 @@ ok: [localhost] => (item={'name': 'WCF', 'path': 'D:\\WebServer\\WCF', 'AppPool'
 TASK [Run commands and register outputs] 
 changed: [localhost] => (item=World)
 changed: [localhost] => (item=Ansible)
-changed: [localhost] => (item=Doraemon)
+changed: [localhost] => (item=Linux)
 
 TASK [Display results] 
 ok: [localhost] => (item={'changed': True, 'stdout': 'Hello World', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello World"', 'start': '2024-12-06 13:41:43.393778', 'end': '2024-12-06 13:41:43.397435', 'delta': '0:00:00.003657', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello World"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello World'], 'stderr_lines': [], 'failed': False, 'item': 'World', 'ansible_loop_var': 'item'}) => {
@@ -1225,8 +1225,8 @@ ok: [localhost] => (item={'changed': True, 'stdout': 'Hello World', 'stderr': ''
 ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Ansible', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello Ansible"', 'start': '2024-12-06 13:41:43.671301', 'end': '2024-12-06 13:41:43.674841', 'delta': '0:00:00.003540', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello Ansible"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello Ansible'], 'stderr_lines': [], 'failed': False, 'item': 'Ansible', 'ansible_loop_var': 'item'}) => {
     "msg": "Hello Ansible"
 }
-ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Doraemon', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello Doraemon"', 'start': '2024-12-06 13:41:44.213032', 'end': '2024-12-06 13:41:44.216680', 'delta': '0:00:00.003648', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello Doraemon"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello Doraemon'], 'stderr_lines': [], 'failed': False, 'item': 'Doraemon', 'ansible_loop_var': 'item'}) => {
-    "msg": "Hello Doraemon"
+ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Linux', 'stderr': '', 'rc': 0, 'cmd': 'echo "Hello Linux"', 'start': '2024-12-06 13:41:44.213032', 'end': '2024-12-06 13:41:44.216680', 'delta': '0:00:00.003648', 'msg': '', 'invocation': {'module_args': {'_raw_params': 'echo "Hello Linux"', '_uses_shell': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'chdir': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': ['Hello Linux'], 'stderr_lines': [], 'failed': False, 'item': 'Linux', 'ansible_loop_var': 'item'}) => {
+    "msg": "Hello Linux"
 }
 ```
 

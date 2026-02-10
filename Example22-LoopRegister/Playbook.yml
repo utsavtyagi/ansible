@@ -9,7 +9,7 @@
       loop:
         - World
         - Ansible
-        - Doraemon
+        - Linux
       register: command_output
 
     - name: Display results
