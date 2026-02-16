@@ -11,6 +11,8 @@
 - Variables, loops, conditions
 - Windows automation using Ansible
 
+---
+
 ## Table of Contents
 1. [Introduction to Ansible](#1-introduction-to-ansible)
 2. [Installation](#2-installation)
@@ -29,91 +31,109 @@
 # Ansible
 
 ## 1. Introduction to Ansible
+
 Ansible is an open-source IT automation tool. It helps automate configuration management, application deployment, task automation, orchestration, and many other IT processes. It is free to use and it simplify operations and reduce complexity. It allows you to automate almost any task across your infrastructure.
 
 Ansible uses simple, human-readable scripts known as playbooks. In a playbook, you define the desired state of a local or remote system, and Ansible ensures that the system remains in that state.
 
 Ansible's design focuses on the following principles:
 
-**Agent-less architecture:** Ansible does not require agents to be installed on managed nodes, minimizing maintenance overhead.
+**Agent-less architecture:**  
+Ansible does not require agents to be installed on managed nodes, minimizing maintenance overhead.
 
-**Simplicity:** Playbooks use clear YAML syntax, making them easy to read and understand. Ansible connects to remote machines using SSH with existing OS credentials.
+**Simplicity:**  
+Playbooks use clear YAML syntax, making them easy to read and understand. Ansible connects to remote machines using SSH with existing OS credentials.
 
-**Scalability and flexibility:** Ansible's modular design supports a wide range of operating systems, cloud platforms, and network devices, enabling easy scaling of automated tasks.
+**Scalability and flexibility:**  
+Ansible's modular design supports a wide range of operating systems, cloud platforms, and network devices, enabling easy scaling of automated tasks.
 
-**Idempotence and predictability:** Ansible only makes changes when necessary. If the system already matches the desired state defined in the playbook, no changes are made, even if the playbook is run multiple times.
+**Idempotence and predictability:**  
+Ansible only makes changes when necessary. If the system already matches the desired state defined in the playbook, no changes are made, even if the playbook is run multiple times.
 
+---
 
 ## 2. Installation
 
 Ansible can be installed on:
 
-**Linux**: This is the most common environment for Ansible. It works on various Linux distributions like Ubuntu, CentOS, Fedora, Rocky, and Red Hat Enterprise Linux (RHEL).
+**Linux:**  
+This is the most common environment for Ansible. It works on various Linux distributions like Ubuntu, CentOS, Fedora, Rocky, and Red Hat Enterprise Linux (RHEL).
 
-**macOS**: Ansible can be installed on macOS using Homebrew or pip (Python's package manager).
+**macOS:**  
+Ansible can be installed on macOS using Homebrew or pip (Python's package manager).
 
-**Windows (via WSL)**: Ansible is not directly supported on Windows as a control node, but you can install it using Windows Subsystem for Linux (WSL). This lets you run a Linux distribution inside Windows.
+**Windows (via WSL):**  
+Ansible is not directly supported on Windows as a control node, but you can install it using Windows Subsystem for Linux (WSL). This lets you run a Linux distribution inside Windows.
 
+---
 
-**Managed Nodes**
+### Managed Nodes
 
 ![image](https://github.com/user-attachments/assets/93a9d476-6f66-4138-9b6a-b89fe459650a)
 
-
 Ansible can manage a wide variety of systems, including:
 
-Linux and Unix systems (e.g., Ubuntu, CentOS, Debian, Red Hat)
-
-Windows systems (via WinRM or SSH)
-
-Cloud platforms (e.g., AWS, Azure, Google Cloud)
-
-Network devices (e.g., Cisco, Juniper, Arista switches)
+- Linux and Unix systems (e.g., Ubuntu, CentOS, Debian, Red Hat)
+- Windows systems (via WinRM or SSH)
+- Cloud platforms (e.g., AWS, Azure, Google Cloud)
+- Network devices (e.g., Cisco, Juniper, Arista switches)
 
 In summary, while the Ansible control node is typically installed on a Unix-like environment (Linux or macOS), it can manage both Unix/Linux and Windows systems, providing flexibility in automation across different platforms.
 
-**Control Node** : The machine where Ansible is installed and executed.
-**Managed Nodes** : The machines that Ansible manages. These do not need Ansible installed.
+**Control Node** :  
+The machine where Ansible is installed and executed.
 
+**Managed Nodes** :  
+The machines that Ansible manages. These do not need Ansible installed.
 
-**Ansible Installation Steps**
+---
+
+### Ansible Installation Steps
 
 Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., Rocky, CentOS, RHEL, Fedora).
 
-Step 1: Install EPEL (Extra Packages for Enterprise Linux) Repository
+#### Step 1: Install EPEL (Extra Packages for Enterprise Linux) Repository
 
 EPEL provides additional packages, including Ansible.
 
 ```bash
 sudo dnf install epel-release -y
-```
+````
 
-Step 2: Install Ansible (After enabling EPEL, install Ansible.)
+#### Step 2: Install Ansible (After enabling EPEL, install Ansible.)
 
 ```bash
 sudo dnf install ansible-core -y
 ```
 
-Verify Ansible Installation
+#### Verify Ansible Installation
 
 Check the installed version of Ansible to confirm the setup and run basic commands.
 
 ```bash
 ansible --version
 ```
+
 Shows the full path of the ansible command executable.
+
 ```bash
 which ansible
 ```
+
 Shows the full path of the ansible-playbook command executable.
+
 ```bash
 which ansible-playbook
 ```
+
 Tests if Ansible can connect and run modules on the local machine
+
 ```bash
 ansible localhost -m ping
 ```
+
 ---
+
 ### Install Required Packages
 
 #### 1. Install `sshpass`
@@ -175,18 +195,21 @@ sudo dnf install -y \
 ```bash
 python3 -m pip install --user pykerberos
 ```
+
 ---
 
+#### 6. Install Windows collection
 
-#### 6.Install Windows collection
 ```bash
 ansible-galaxy collection install ansible.windows
 ```
 
 Verify:
+
 ```bash
 ansible-galaxy collection list | grep ansible.windows
 ```
+
 ---
 
 #### 7. Configure WinRM on Windows Servers
@@ -204,8 +227,6 @@ Run the official Ansible PowerShell script on each Windows target to enable and 
 
 **Create a Dedicated Ansible User**
 
-Run the following commands on each target Linux server:
-
 ```bash
 sudo useradd ansibleuser
 sudo passwd ansibleuser
@@ -214,8 +235,6 @@ sudo passwd ansibleuser
 ---
 
 **Configure Passwordless Sudo**
-
-Edit the sudoers file:
 
 ```bash
 sudo visudo
@@ -229,7 +248,7 @@ ansibleuser ALL=(ALL) NOPASSWD: ALL
 
 ---
 
-**Do **NOT** Add User to `wheel` Group**
+**Do NOT Add User to `wheel` Group**
 
 Avoid granting broad administrative privileges via the `wheel` group.
 
@@ -280,8 +299,6 @@ ssh ansibleuser@TargetedLinuxServer
 Login should succeed **without prompting for a password**.
 
 ---
-
-
 
 ## 3. Understanding YAML
 
