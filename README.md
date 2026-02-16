@@ -1526,7 +1526,6 @@ The `win_package` module handles installation or removal of software on Windows.
 #### Output:
 ```output
 
-```
 TASK [Install Google Chrome] 
 changed: [CCLABAPP02]
 changed: [CCLABAPP01]
@@ -1548,6 +1547,7 @@ ok: [CCLABAPP02] => {
         "reboot_required": false
     }
 }
+```
 ---
 
 ### **5. `win_copy`: Copying Files to Windows Hosts**
