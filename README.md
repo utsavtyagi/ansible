@@ -302,31 +302,39 @@ Login should succeed **without prompting for a password**.
 
 ## 3. Understanding YAML
 
-YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.
-YAML is a human-readable data serialization language. It is commonly used for configuration files and in applications where data is being stored.
+YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.  
+YAML is a human-readable data serialization language. It is commonly used for configuration files and in applications where data is being stored.  
 YAML stands for yet another markup language or YAML ain’t markup language.
+
+---
 
 ### YAML Example
 
 #### Key Value Pair
+
 ```yaml
 ---
 Fruit: Mango
 Vegetable: Tomato
 Flower: Lotus
 ```
+
 ```yaml
 ---
 app_name: CoreCredit
 app_port: 443
 environment: Production
 ```
-- Used for simple configuration settings (app name, port, environment).
-- Values can be string, number, boolean.
-- Keys must be unique.
-- Common in application config files and Ansible variables.
+
+* Used for simple configuration settings (app name, port, environment).
+* Values can be string, number, boolean.
+* Keys must be unique.
+* Common in application config files and Ansible variables.
+
+---
 
 #### Array/List
+
 ```yaml
 ---
 Fruits:
@@ -357,12 +365,16 @@ packages:
   - docker
   - git
 ```
-- Used to store multiple items of the same type.
-- Order matters in lists.
-- ach item starts with -.
-- Commonly used for servers, packages, users, IPs.
+
+* Used to store multiple items of the same type.
+* Order matters in lists.
+* ach item starts with -.
+* Commonly used for servers, packages, users, IPs.
+
+---
 
 #### Dictionary/Map
+
 ```yaml
 ---
 Orange:
@@ -379,7 +391,6 @@ Banana:
   Calories: 105
   Fat: 0.3 g
   Carbs: 27 g
-
 ```
 
 ```yaml
@@ -390,12 +401,15 @@ database:
   name: CoreCreditDB
 ```
 
-- Stores key-value pairs inside a parent object.
-- Used for structured configurations like database settings.
-- Keys inside a dictionary must be unique.
-- Dictionaries are unordered.
+* Stores key-value pairs inside a parent object.
+* Used for structured configurations like database settings.
+* Keys inside a dictionary must be unique.
+* Dictionaries are unordered.
+
+---
 
 #### List of dictionaries
+
 ```yaml
 ---
 Fruits:
@@ -403,17 +417,16 @@ Fruits:
       Calories: 62
       Fat: 0.2 g
       Carbs: 15.4 g
-   
+
   - Mango:
       Calories: 135
       Fat: 0.6 g
       Carbs: 35 g
-   
+
   - Banana:
       Calories: 105
       Fat: 0.3 g
       Carbs: 27 g
-
 ```
 
 ```yaml
@@ -428,26 +441,34 @@ websites:
     app_pool: WCF_AppPool
 ```
 
-- Used when each item has multiple properties.
-- Very common in DevOps and Ansible for websites, services, users, containers.
-- Each list item is a dictionary with multiple keys.
-- Ideal for defining complex configurations in a structured way.
+* Used when each item has multiple properties.
+* Very common in DevOps and Ansible for websites, services, users, containers.
+* Each list item is a dictionary with multiple keys.
+* Ideal for defining complex configurations in a structured way.
+
+---
 
 ### Key Points
-- Indentation matters.
-- Use `:` for key-value pairs.
-- Use `-` for lists.
-- Dictionary is unordered collectiom
-- List is ordered collection (order of items matters)
-- Use "#" to comment any line
 
+* Indentation matters.
+* Use `:` for key-value pairs.
+* Use `-` for lists.
+* Dictionary is unordered collectiom
+* List is ordered collection (order of items matters)
+* Use "#" to comment any line
+
+---
 
 ## 4. Ansible Inventory
+
 The inventory file lists all hosts managed by Ansible.
+
+---
 
 ### Inventory Examples
 
 #### List of Servers
+
 This is a simple list of servers without any grouping.
 
 ```yaml
@@ -459,8 +480,10 @@ all:
     server3.example.com:
 ```
 
+---
 
 #### Groups and Servers
+
 This example includes groups and assigns servers to each group.
 
 ```yaml
@@ -478,7 +501,10 @@ AppGroup2:
     cclabwf01:
 ```
 
+---
+
 #### Groups, Servers, and Parameters (Connection, Port, etc.)
+
 This example specifies additional parameters like connection type, port, and custom variables.
 
 ```yaml
@@ -504,26 +530,37 @@ all:
     ansible_winrm_scheme: https
 ```
 
-
+---
 
 ## 5. Ansible Playbooks
+
 Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configuration management and automation script written in YAML that defines a set of tasks for Ansible to execute on remote machines. Playbooks are the main way to organize and execute automation jobs in Ansible. They can include various tasks, handlers, variables, and other elements needed to manage systems, configure applications, or deploy services.
+
+---
 
 **Key Components of a Playbook:**
 
-**Plays:** A playbook consists of one or more "plays." Each play is an attempt to map a group of hosts to some tasks. A play runs tasks on selected machines based on the inventory.
+**Plays:**
+A playbook consists of one or more "plays." Each play is an attempt to map a group of hosts to some tasks. A play runs tasks on selected machines based on the inventory.
 
-**Tasks:** Each play contains a list of tasks. A task defines an action to be performed on the target systems, such as installing a package, copying a file, or starting a service. Tasks use Ansible modules (like apt, yum, copy, etc.) to perform these actions.
+**Tasks:**
+Each play contains a list of tasks. A task defines an action to be performed on the target systems, such as installing a package, copying a file, or starting a service. Tasks use Ansible modules (like apt, yum, copy, etc.) to perform these actions.
 
-**Hosts:** Defines which machines (from the inventory) the tasks will be executed on. This can be a group of machines or a specific host.
+**Hosts:**
+Defines which machines (from the inventory) the tasks will be executed on. This can be a group of machines or a specific host.
 
-**Variables:** Variables can be used to define dynamic values such as paths, usernames, or any parameter that changes frequently. Variables can be set within the playbook or defined externally.
+**Variables:**
+Variables can be used to define dynamic values such as paths, usernames, or any parameter that changes frequently. Variables can be set within the playbook or defined externally.
 
-**Handlers:** Handlers are special tasks that only run when notified by another task. Typically, handlers are used for things like restarting services after a configuration change.
+**Handlers:**
+Handlers are special tasks that only run when notified by another task. Typically, handlers are used for things like restarting services after a configuration change.
+
+---
 
 ### Playbook Example
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Print the hostname of the Linux server
@@ -535,29 +572,33 @@ Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configu
     - name: Install chrony
       shell: sudo dnf install chrony -y
 ```
-- **name:** Describes what the playbook or task does. It's just for readability.
 
-- **hosts:** Specifies the host or group of hosts to run the tasks on. Here, all is the host group defined in the Ansible inventory, You can specify any group specified in the inventory.
+* **name:** Describes what the playbook or task does. It's just for readability.
+* **hosts:** Specifies the host or group of hosts to run the tasks on. Here, all is the host group defined in the Ansible inventory, You can specify any group specified in the inventory.
+* **tasks:** Defines a list of tasks to execute on the hosts:
 
-- **tasks:** Defines a list of tasks to execute on the hosts:
+  ```
+        - Run echo command to display the hostname.
+        - Install chrony.
+  ```
 
-            - Run echo command to display the hostname.
-            - Install chrony.
+---
 
-
-### Ansible Playbook Execution:
+### Ansible Playbook Execution
 
 You can run an Ansible playbook with the following command:
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml
 ```
 
-- Playbook.yml is the playbook file name.
-- inventory.yml is the inventory file name.
+* Playbook.yml is the playbook file name.
+* inventory.yml is the inventory file name.
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1'"
 ```
@@ -566,8 +607,9 @@ ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1'"
 ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1, Group2'"
 ```
 
-- "Group" is a extra variables we are passing in command.
+* "Group" is a extra variables we are passing in command.
 
+---
 
 ## 6. Ansible Variables
 **What Are Variables?**
