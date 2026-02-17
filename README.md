@@ -744,10 +744,10 @@ Comments are ignored during execution.
 
 ### Common YAML Mistakes
 
-❌ Wrong indentation
-❌ Mixing tabs and spaces
-❌ Missing `:` after keys
-❌ Incorrect list formatting
+- ❌ Wrong indentation
+- ❌ Mixing tabs and spaces
+- ❌ Missing `:` after keys
+- ❌ Incorrect list formatting
 
 YAML is **indentation-sensitive**. Use **spaces only**.
 
