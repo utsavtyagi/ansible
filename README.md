@@ -95,61 +95,100 @@ The machines that Ansible manages. These do not need Ansible installed.
 
 ### Ansible Installation Steps
 
-Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., Rocky, CentOS, RHEL, Fedora).
+This section explains how to install and prepare **Ansible Control Node (Linux)** and configure **Linux and Windows Managed Nodes**.  
+The sequence follows real-world best practices:
+1. Prepare Linux control node
+2. Install Ansible
+3. Install required dependencies
+4. Configure Windows connectivity
+5. Configure Linux SSH access
 
-#### Step 1: Update Linux Packages
-Updates all installed packages on the system to their latest versions, including security patches, kernel updates, system components, and libraries.
+---
+
+## Part 1: Prepare Ansible Control Node (Linux)
+
+Below steps apply to **Red Hat-based Linux distributions** such as **Rocky, CentOS, RHEL, Fedora**.
+
+---
+
+### Step 1: Update Linux Packages
+
+Updates all installed packages on the system to their latest versions, including:
+- Security patches  
+- Kernel updates  
+- System libraries  
+
+This ensures system stability before installing Ansible.
+
 ```bash
 sudo dnf update -y
 ````
 
-#### Step 2: Install EPEL (Extra Packages for Enterprise Linux) Repository
+---
 
-EPEL provides additional packages, including Ansible.
+### Step 2: Install EPEL Repository
+
+EPEL (Extra Packages for Enterprise Linux) provides additional packages not available in the default repositories, including Ansible.
 
 ```bash
 sudo dnf install epel-release -y
-````
+```
 
-#### Step 3: Install Ansible (After enabling EPEL, install Ansible.)
+---
+
+### Step 3: Install Ansible
+
+Installs **Ansible Core**, which includes:
+
+* `ansible`
+* `ansible-playbook`
+* Core modules and plugins
 
 ```bash
 sudo dnf install ansible-core -y
 ```
 
-#### Verify Ansible Installation
+---
 
-Check the installed version of Ansible to confirm the setup and run basic commands.
+### Step 4: Verify Ansible Installation
+
+Check the installed Ansible version.
 
 ```bash
 ansible --version
 ```
 
-Shows the full path of the ansible command executable.
+Verify the Ansible binary path.
 
 ```bash
 which ansible
 ```
 
-Shows the full path of the ansible-playbook command executable.
+Verify the Ansible playbook binary path.
 
 ```bash
 which ansible-playbook
 ```
 
-Tests if Ansible can connect and run modules on the local machine
+Test whether Ansible can execute modules locally.
 
 ```bash
 ansible localhost -m ping
 ```
 
+Expected result: `pong`
+
 ---
 
-### Install Required Packages
+## Part 2: Install Required Packages on Control Node
 
-#### 1. Install `sshpass`
+These packages are required for **SSH**, **Windows (WinRM)**, and **Kerberos authentication**.
 
-Required to use the **SSH connection type with password authentication**.
+---
+
+### Step 5: Install `sshpass`
+
+Required when using **password-based SSH authentication** (not recommended for production, but useful for initial testing).
 
 ```bash
 sudo dnf install -y sshpass
@@ -157,9 +196,9 @@ sudo dnf install -y sshpass
 
 ---
 
-### 2. Install Python Package Manager (`pip`)
+### Step 6: Install Python Package Manager (`pip`)
 
-Python’s package manager is required to install additional Python modules such as `pywinrm`.
+`pip` is required to install Python libraries used by Ansible for Windows communication.
 
 ```bash
 sudo dnf install -y python3-pip
@@ -167,25 +206,25 @@ sudo dnf install -y python3-pip
 
 ---
 
-#### 3. Install `pywinrm`
+### Step 7: Install `pywinrm`
 
-The `pywinrm` module enables **Ansible to communicate with Windows hosts** using **WinRM (Windows Remote Management)**.
+Enables Ansible to communicate with Windows hosts using **WinRM**.
 
 ```bash
 sudo pip install pywinrm
 ```
 
-> 💡 Alternatively, you may use `pip3` if required:
->
-> ```bash
-> sudo pip3 install pywinrm
-> ```
+Alternative (if `pip3` is required):
+
+```bash
+sudo pip3 install pywinrm
+```
 
 ---
 
-#### 4. Install Kerberos Dependencies
+### Step 8: Install Kerberos Dependencies
 
-These packages are required for **Kerberos-based authentication** with WinRM.
+Required for **Kerberos-based WinRM authentication**, commonly used in enterprise environments.
 
 ```bash
 sudo dnf install -y \
@@ -199,9 +238,9 @@ sudo dnf install -y \
 
 ---
 
-#### 5. Install `pykerberos`
+### Step 9: Install `pykerberos`
 
-`pykerberos` provides Kerberos support for Python-based authentication.
+Provides Kerberos authentication support for Python.
 
 ```bash
 python3 -m pip install --user pykerberos
@@ -209,13 +248,20 @@ python3 -m pip install --user pykerberos
 
 ---
 
-#### 6. Install Windows collection
+### Step 10: Install Ansible Windows Collection
+
+Installs Windows-specific Ansible modules such as:
+
+* `win_shell`
+* `win_service`
+* `win_copy`
+* `win_reboot`
 
 ```bash
 ansible-galaxy collection install ansible.windows
 ```
 
-Verify:
+Verify installation:
 
 ```bash
 ansible-galaxy collection list | grep ansible.windows
@@ -223,35 +269,52 @@ ansible-galaxy collection list | grep ansible.windows
 
 ---
 
-#### 7. Configure WinRM on Windows Servers
-
-Run the official Ansible PowerShell script on each Windows target to enable and configure WinRM:
-
-🔗 **ConfigureRemotingForAnsible.ps1**
-[ConfigureRemotingForAnsible](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
-
-> This script configures WinRM, firewall rules, and required settings for Ansible connectivity.
+## Part 3: Configure Windows Managed Nodes
 
 ---
 
-#### 8. Configure Target Linux Servers - Configure SSH Key-Based Authentication
+### Step 11: Configure WinRM on Windows Servers
 
-**Create a Dedicated Ansible User**
+Run the official Ansible PowerShell script **on each Windows target server**.
+
+🔗 **ConfigureRemotingForAnsible.ps1**
+[https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+
+This script:
+
+* Enables WinRM
+* Configures firewall rules
+* Sets authentication and encryption
+* Prepares Windows for Ansible connectivity
+
+---
+
+## Part 4: Configure Linux Managed Nodes (SSH)
+
+---
+
+### Step 12: Create a Dedicated Ansible User
+
+Run on **each target Linux server**.
 
 ```bash
 sudo useradd ansibleuser
 sudo passwd ansibleuser
 ```
 
+This user will be used exclusively by Ansible for automation.
+
 ---
 
-**Configure Passwordless Sudo**
+### Step 13: Configure Passwordless Sudo
+
+Allows Ansible to execute privileged commands without prompting for a password.
 
 ```bash
 sudo visudo
 ```
 
-Add the following entry:
+Add:
 
 ```text
 ansibleuser ALL=(ALL) NOPASSWD: ALL
@@ -259,49 +322,50 @@ ansibleuser ALL=(ALL) NOPASSWD: ALL
 
 ---
 
-**Do NOT Add User to `wheel` Group**
+### Step 14: Do NOT Add User to `wheel` Group
 
-Avoid granting broad administrative privileges via the `wheel` group.
+Avoid unnecessary administrative privileges.
 
 ```bash
-# If added earlier, remove ansibleuser from wheel
 sudo gpasswd -d ansibleuser wheel
 ```
 
-> ⚠️ Do not run:
->
-> ```bash
-> sudo usermod -aG wheel ansibleuser
-> ```
+⚠️ Do **NOT** run:
+
+```bash
+sudo usermod -aG wheel ansibleuser
+```
 
 ---
 
-**Generate SSH Key Pair (On Control Node)**
+### Step 15: Generate SSH Key Pair (Control Node)
+
+Run on the **Ansible control node**.
 
 ```bash
 ssh-keygen -t rsa -b 4096
 ```
 
-This generates:
+Generates:
 
 * **Private Key:** `/home/utsavtyagi/.ssh/id_rsa` (keep secure)
-* **Public Key:** `/home/utsavtyagi/.ssh/id_rsa.pub` (copy to target servers)
+* **Public Key:** `/home/utsavtyagi/.ssh/id_rsa.pub`
 
 ---
 
-#### Copy Public Key to Target Servers
+### Step 16: Copy Public Key to Target Linux Servers
 
 ```bash
 ssh-copy-id ansibleuser@172.16.1.210
 ```
 
-> Repeat for all target servers.
+Repeat for all Linux target servers.
 
 ---
 
-### Verification
+## Verification
 
-Test passwordless SSH access:
+Test passwordless SSH login:
 
 ```bash
 ssh ansibleuser@TargetedLinuxServer
