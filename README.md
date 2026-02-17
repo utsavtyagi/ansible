@@ -97,7 +97,13 @@ The machines that Ansible manages. These do not need Ansible installed.
 
 Below are the steps to install Ansible on a Red Hat-based Linux distribution (e.g., Rocky, CentOS, RHEL, Fedora).
 
-#### Step 1: Install EPEL (Extra Packages for Enterprise Linux) Repository
+#### Step 1: Update Linux Packages
+Updates all installed packages on the system to their latest versions, including security patches, kernel updates, system components, and libraries.
+```bash
+sudo dnf update -y
+````
+
+#### Step 2: Install EPEL (Extra Packages for Enterprise Linux) Repository
 
 EPEL provides additional packages, including Ansible.
 
@@ -105,7 +111,7 @@ EPEL provides additional packages, including Ansible.
 sudo dnf install epel-release -y
 ````
 
-#### Step 2: Install Ansible (After enabling EPEL, install Ansible.)
+#### Step 3: Install Ansible (After enabling EPEL, install Ansible.)
 
 ```bash
 sudo dnf install ansible-core -y
