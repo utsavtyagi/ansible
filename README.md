@@ -456,12 +456,6 @@ Executes shell commands on Linux hosts.
 ansible all -m shell -a "uptime" -i inventory.yml
 ```
 
-Use `shell` when:
-
-* Pipes (`|`)
-* Redirects (`>`)
-* Environment variables are required
-
 ---
 
 ### 6. Run Windows Commands
