@@ -958,6 +958,59 @@ WindowsServers:
 
 ---
 
+### Common (Mixed) Inventory Example
+
+In real-world environments, Ansible often manages **both Linux and Windows servers** from a single inventory file.  
+A **common inventory** separates hosts into logical groups while allowing shared variables at higher levels.
+
+---
+
+#### Mixed Inventory with Linux and Windows Hosts
+
+```yaml
+LinuxServers:
+  hosts:
+    rocky01:
+    rocky02:
+  vars:
+    ansible_user: username2
+    ansible_password: "*********"
+
+WindowsServers:
+  hosts:
+    CCLABAPP01:
+    CCLABAPP02:
+  vars:
+    ansible_user: username3
+    ansible_password: "*********"
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    ansible_winrm_port: 5985
+    ansible_winrm_scheme: http
+
+LinuxServersOtherGroup:
+  hosts:
+    rocky03:
+    rocky04:
+
+all:
+  vars:
+    ansible_connection: ssh
+    ansible_user: username1
+    ansible_password: "*********"
+ ```
+---
+
+###  Security Warning (Important)
+
+- ❌ Passwords in inventory = bad practice
+
+ - Recommended alternatives:
+
+   - Linux → SSH key-based auth
+
+   - Windows → Kerberos or Vault
+
 ### Inventory Best Practices
 
 ✔ Use YAML format
