@@ -869,20 +869,27 @@ Use and or or for complex conditions.
 ## 8. Understanding `set_fact` in Ansible
 
 ### What is `set_fact`?
+
 `set_fact` is used to create or modify variables dynamically during playbook execution. These variables, known as facts, persist for the duration of the play.
+
+---
 
 ### Syntax for `set_fact`
 
 ##### Playbook:
+
 ```yaml
 - name: Define a fact
   set_fact:
     variable_name: value
 ```
 
+---
+
 #### Example 1: Simple Fact Definition
 
 ##### Playbook:
+
 ```yaml
 - name: Use set_fact to define a variable
   hosts: localhost
@@ -897,11 +904,13 @@ Use and or or for complex conditions.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Set a fact]
 ok: [localhost]
@@ -912,12 +921,14 @@ ok: [localhost] => {
 }
 ```
 
+---
 
 #### Example 2: Updating a Fact's Value
 
 You can perform calculations or manipulate data with set_fact.
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Update a fact's value
@@ -941,11 +952,13 @@ You can perform calculations or manipulate data with set_fact.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Set initial value] 
 ok: [localhost]
@@ -972,11 +985,14 @@ ok: [localhost] => {
 }
 ```
 
+---
+
 #### Example 3: Calculations with set_fact
 
 You can perform calculations or manipulate data with set_fact.
 
 ##### Playbook:
+
 ```yaml
 - name: Perform calculations with set_fact
   hosts: localhost
@@ -996,11 +1012,13 @@ You can perform calculations or manipulate data with set_fact.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Set initial values]
 ok: [localhost]
@@ -1014,10 +1032,14 @@ ok: [localhost] => {
 }
 ```
 
+---
+
 #### Example 4: Conditional Facts
+
 Set facts based on conditions.
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Conditional set_fact
@@ -1043,11 +1065,13 @@ Set facts based on conditions.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 PLAY [Conditional set_fact] 
 
@@ -1062,23 +1086,32 @@ ok: [localhost] => {
 }
 ```
 
+---
+
 ## 9. Understanding `register` in Ansible
 
 ### What is `register`?
+
 The `register` directive captures the output of a task and stores it in a variable. This variable contains detailed information such as stdout, stderr, return code, and more.
+
+---
 
 ### Syntax for `register`
 
 ##### Playbook:
+
 ```yaml
 - name: Run a task and register its output
   command: your_command_here
   register: variable_name
 ```
 
+---
+
 #### Example 1: Capture Command Output
 
 ##### Playbook:
+
 ```yaml
 - name: Capture command output
   hosts: localhost
@@ -1094,11 +1127,13 @@ The `register` directive captures the output of a task and stores it in a variab
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Run the hostname command] 
 changed: [localhost]
@@ -1107,14 +1142,16 @@ TASK [Display the output]
 ok: [localhost] => {
     "msg": "The hostname is {'changed': True, 'stdout': 'VMCCROCKY01', 'stderr': '', 'rc': 0, 'cmd': ['hostname'], 'start': '2024-12-06 12:32:41.347346', 'end': '2024-12-06 12:32:41.350822', 'delta': '0:00:00.003476', 'msg': '', 'stdout_lines': ['VMCCROCKY01'], 'stderr_lines': [], 'failed': False}"
 }
-
 ```
+
+---
 
 #### Example 2: Using `register` with Conditions
 
 You can make decisions based on the output captured using register.
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Conditional task based on register
@@ -1133,11 +1170,13 @@ You can make decisions based on the output captured using register.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Check if a file exists] 
 ok: [localhost]
@@ -1148,23 +1187,31 @@ ok: [localhost] => {
 }
 ```
 
+---
+
 #### Registered Data Structure
+
 The variable created by `register` contains the following structure:
- - stdout: Standard output of the command.
- - stderr: Standard error of the command.
- - rc: Return code.
- - changed: Boolean indicating if the task made changes.
 
+* stdout: Standard output of the command.
+* stderr: Standard error of the command.
+* rc: Return code.
+* changed: Boolean indicating if the task made changes.
 
+---
 
 ## 10. Introduction to `loop` in Ansible
 
 ### What is `loop`?
+
 `Loop` in Ansible allow you to execute a task multiple times with varying inputs. This is useful for repetitive actions like creating files, managing packages, or configuring users.
+
+---
 
 ### Syntax for `loop`
 
 ##### Playbook:
+
 ```yaml
 tasks:
   - name: Task with a loop
@@ -1176,9 +1223,12 @@ tasks:
       - item3
 ```
 
+---
+
 #### Example 1: Loop Example
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Loop Example
@@ -1195,11 +1245,13 @@ tasks:
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [loop example task] 
 ok: [localhost] => (item=Netflix) => {
@@ -1213,9 +1265,12 @@ ok: [localhost] => (item=Hotstar) => {
 }
 ```
 
+---
+
 #### Example 2: Creating Multiple Files
 
 ##### Playbook:
+
 ```yaml
 - name: Create multiple files on Windows
   hosts: all
@@ -1232,11 +1287,13 @@ ok: [localhost] => (item=Hotstar) => {
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Create files] 
 changed: [CCLABAPP01] => (item=file1.txt)
@@ -1247,10 +1304,13 @@ changed: [CCLABAPP02] => (item=file2.txt)
 changed: [CCLABAPP02] => (item=file3.txt)
 ```
 
+---
+
 #### Example 3: Using Dictionaries in Loop
 You can loop over dictionaries to handle more complex data structures.
 
 ##### Playbook:
+
 ```yaml
 - name: Website Information
   hosts: localhost
@@ -1272,11 +1332,13 @@ You can loop over dictionaries to handle more complex data structures.
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [loop example task] 
 ok: [localhost] => (item={'name': 'CoreCredit', 'path': 'D:\\WebServer\\CoreCredit', 'AppPool': 'CoreCredit_AppPool', 'User': 'web_user'}) => {
@@ -1287,10 +1349,12 @@ ok: [localhost] => (item={'name': 'WCF', 'path': 'D:\\WebServer\\WCF', 'AppPool'
 }
 ```
 
+---
 
 #### Example 4: Registering Output in Loop
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Register outputs in Loop
@@ -1313,11 +1377,13 @@ ok: [localhost] => (item={'name': 'WCF', 'path': 'D:\\WebServer\\WCF', 'AppPool'
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Run commands and register outputs] 
 changed: [localhost] => (item=World)
@@ -1336,10 +1402,12 @@ ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Linux', 'stderr': ''
 }
 ```
 
+---
 
 #### Example 5: Conditional Loop Execution
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Conditional tasks based on loop items
@@ -1358,11 +1426,13 @@ ok: [localhost] => (item={'changed': True, 'stdout': 'Hello Linux', 'stderr': ''
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [Skip items based on condition] 
 changed: [CCLABAPP01] => (item=item1)
@@ -1371,24 +1441,28 @@ skipping: [CCLABAPP01] => (item=skip_this)
 changed: [CCLABAPP01] => (item=item3)
 ```
 
+---
 
 ### `label` and `loop_control` in `loop`
 
 The label in loop_control is used to customize the label shown in the output of the task during a playbook run. This makes the output more meaningful and easier to understand, especially when dealing with loops that process multiple items.
 
-
 By default, Ansible shows the `item` being processed in the output. Using `loop_control.label`, you can define a custom label for each loop iteration.
 
+---
 
 #### Key Features of label in loop_control:
- - Custom Message: It replaces the default item output with a descriptive label.
- - Dynamic Values: You can use variables like {{ item }} or other contextual data to make the label meaningful.
- - Improves Readability: Helps in debugging by making the playbook's output more user-friendly.
 
+* Custom Message: It replaces the default item output with a descriptive label.
+* Dynamic Values: You can use variables like {{ item }} or other contextual data to make the label meaningful.
+* Improves Readability: Helps in debugging by making the playbook's output more user-friendly.
+
+---
 
 ##### With `label` and without `label`
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Loop Example
@@ -1402,23 +1476,24 @@ By default, Ansible shows the `item` being processed in the output. Using `loop_
         - Apache
         - Nginx
 
-
     - name: loop example task
       shell: echo "Processing your request using {{ item }}"
       loop:
         - IIS
         - Apache
         - Nginx
-      loop_control: 
+      loop_control:
         label: "WebServer: {{ item }}"
 ```
 
 ##### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Output:
+
 ```output
 TASK [loop without label] 
 changed: [localhost] => (item=IIS)
@@ -1431,6 +1506,7 @@ changed: [localhost] => (item=WebServer: Apache)
 changed: [localhost] => (item=WebServer: Nginx)
 ```
 
+---
 
 ## 11. Ansible `Modules`
 
