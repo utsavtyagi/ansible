@@ -22,15 +22,16 @@
 ## Table of Contents
 1. [Introduction to Ansible](#1-introduction-to-ansible)
 2. [Installation](#2-installation)
-3. [Understanding YAML](#3-understanding-yaml)
-4. [Ansible Inventory](#4-ansible-inventory)
-5. [Ansible Playbooks](#5-ansible-playbooks)
-6. [Ansible Variables](#6-ansible-variables)
-7. [Ansible `when` Condition](#7-ansible-when-condition)
-8. [Understanding `set_fact` in Ansible](#8-understanding-set_fact-in-ansible)
-9. [Understanding `register` in Ansible](#9-understanding-register-in-ansible)
-10. [Introduction to `loop` in Ansible](#10-introduction-to-loop-in-ansible)
-11. [Ansible `Modules`](#11-ansible-modules)
+3. [Ansible Commands](#3-ansible-commands)
+4. [Understanding YAML](#4-understanding-yaml)
+5. [Ansible Inventory](#5-ansible-inventory)
+6. [Ansible Playbooks](#6-ansible-playbooks)
+7. [Ansible Variables](#7-ansible-variables)
+8. [Ansible `when` Condition](#8-ansible-when-condition)
+9. [Understanding `set_fact` in Ansible](#9-understanding-set_fact-in-ansible)
+10. [Understanding `register` in Ansible](#10-understanding-register-in-ansible)
+11. [Introduction to `loop` in Ansible](#11-introduction-to-loop-in-ansible)
+12. [Ansible `Modules`](#12-ansible-modules)
 
 ---
 
@@ -105,13 +106,13 @@ The sequence follows real-world best practices:
 
 ---
 
-## Part 1: Prepare Ansible Control Node (Linux)
+### Part 1: Prepare Ansible Control Node (Linux)
 
 Below steps apply to **Red Hat-based Linux distributions** such as **Rocky, CentOS, RHEL, Fedora**.
 
 ---
 
-### Step 1: Update Linux Packages
+#### Step 1: Update Linux Packages
 
 Updates all installed packages on the system to their latest versions, including:
 - Security patches  
@@ -136,7 +137,7 @@ sudo dnf install epel-release -y
 
 ---
 
-### Step 3: Install Ansible
+#### Step 3: Install Ansible
 
 Installs **Ansible Core**, which includes:
 
@@ -150,7 +151,7 @@ sudo dnf install ansible-core -y
 
 ---
 
-### Step 4: Verify Ansible Installation
+#### Step 4: Verify Ansible Installation
 
 Check the installed Ansible version.
 
@@ -180,13 +181,13 @@ Expected result: `pong`
 
 ---
 
-## Part 2: Install Required Packages on Control Node
+### Part 2: Install Required Packages on Control Node
 
 These packages are required for **SSH**, **Windows (WinRM)**, and **Kerberos authentication**.
 
 ---
 
-### Step 5: Install `sshpass`
+#### Step 5: Install `sshpass`
 
 Required when using **password-based SSH authentication** (not recommended for production, but useful for initial testing).
 
@@ -196,7 +197,7 @@ sudo dnf install -y sshpass
 
 ---
 
-### Step 6: Install Python Package Manager (`pip`)
+#### Step 6: Install Python Package Manager (`pip`)
 
 `pip` is required to install Python libraries used by Ansible for Windows communication.
 
@@ -206,7 +207,7 @@ sudo dnf install -y python3-pip
 
 ---
 
-### Step 7: Install `pywinrm`
+#### Step 7: Install `pywinrm`
 
 Enables Ansible to communicate with Windows hosts using **WinRM**.
 
@@ -222,7 +223,7 @@ sudo pip3 install pywinrm
 
 ---
 
-### Step 8: Install Kerberos Dependencies
+#### Step 8: Install Kerberos Dependencies
 
 Required for **Kerberos-based WinRM authentication**, commonly used in enterprise environments.
 
@@ -238,7 +239,7 @@ sudo dnf install -y \
 
 ---
 
-### Step 9: Install `pykerberos`
+#### Step 9: Install `pykerberos`
 
 Provides Kerberos authentication support for Python.
 
@@ -248,7 +249,7 @@ python3 -m pip install --user pykerberos
 
 ---
 
-### Step 10: Install Ansible Windows Collection
+#### Step 10: Install Ansible Windows Collection
 
 Installs Windows-specific Ansible modules such as:
 
@@ -269,11 +270,11 @@ ansible-galaxy collection list | grep ansible.windows
 
 ---
 
-## Part 3: Configure Windows Managed Nodes
+### Part 3: Configure Windows Managed Nodes
 
 ---
 
-### Step 11: Configure WinRM on Windows Servers
+#### Step 11: Configure WinRM on Windows Servers
 
 Run the official Ansible PowerShell script **on each Windows target server**.
 
@@ -289,11 +290,11 @@ This script:
 
 ---
 
-## Part 4: Configure Linux Managed Nodes (SSH)
+### Part 4: Configure Linux Managed Nodes (SSH)
 
 ---
 
-### Step 12: Create a Dedicated Ansible User
+#### Step 12: Create a Dedicated Ansible User
 
 Run on **each target Linux server**.
 
@@ -306,7 +307,7 @@ This user will be used exclusively by Ansible for automation.
 
 ---
 
-### Step 13: Configure Passwordless Sudo
+#### Step 13: Configure Passwordless Sudo
 
 Allows Ansible to execute privileged commands without prompting for a password.
 
@@ -322,7 +323,7 @@ ansibleuser ALL=(ALL) NOPASSWD: ALL
 
 ---
 
-### Step 14: Do NOT Add User to `wheel` Group
+#### Step 14: Do NOT Add User to `wheel` Group
 
 Avoid unnecessary administrative privileges.
 
@@ -338,7 +339,7 @@ sudo usermod -aG wheel ansibleuser
 
 ---
 
-### Step 15: Generate SSH Key Pair (Control Node)
+#### Step 15: Generate SSH Key Pair (Control Node)
 
 Run on the **Ansible control node**.
 
@@ -363,7 +364,7 @@ Repeat for all Linux target servers.
 
 ---
 
-## Verification
+### Verification
 
 Test passwordless SSH login:
 
@@ -375,7 +376,132 @@ Login should succeed **without prompting for a password**.
 
 ---
 
-## 3. Understanding YAML
+## 3. Ansible Commands
+
+This section covers **commonly used Ansible commands** that help you:
+- Verify Ansible installation
+- Test connectivity
+- Run ad-hoc commands
+- Execute modules without writing playbooks
+
+These commands are frequently used during **setup, troubleshooting, and validation**.
+
+---
+
+### 1. Check Ansible Version
+
+Displays the installed Ansible version, configuration file location, Python version, and module paths.
+
+```bash
+ansible --version
+```
+
+---
+
+### 2. Test Localhost Connectivity
+
+Tests whether Ansible can execute modules on the local machine.
+
+```bash
+ansible localhost -m ping
+```
+
+Expected output:
+
+```text
+localhost | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+---
+
+### 3. Ping All Hosts in Inventory
+
+Verifies connectivity to all managed hosts defined in the inventory file.
+
+```bash
+ansible all -m ping -i inventory.yml
+```
+
+This confirms:
+
+* SSH (Linux) or WinRM (Windows) connectivity
+* Authentication is working
+* Python / PowerShell execution is successful
+
+---
+
+### 4. Run a Command on All Hosts
+
+Executes a command on all target machines.
+
+```bash
+ansible all -m command -a "hostname" -i inventory.yml
+```
+
+Useful for:
+
+* Verifying hostnames
+* Quick system checks
+
+---
+
+### 5. Run Shell Commands (Linux Only)
+
+Executes shell commands on Linux hosts.
+
+```bash
+ansible all -m shell -a "uptime" -i inventory.yml
+```
+
+Use `shell` when:
+
+* Pipes (`|`)
+* Redirects (`>`)
+* Environment variables are required
+
+---
+
+### 6. Run Windows Commands
+
+Runs a command on Windows hosts using WinRM.
+
+```bash
+ansible all -m win_command -a "hostname" -i inventory.yml
+```
+
+---
+
+### 7. Gather System Facts
+
+Collects detailed system information (OS, CPU, memory, disks, IPs).
+
+```bash
+ansible all -m setup -i inventory.yml
+```
+
+Facts are stored in variables like:
+
+* `ansible_hostname`
+* `ansible_os_family`
+* `ansible_default_ipv4.address`
+
+---
+
+### 8. Check Inventory Hosts
+
+Lists all hosts defined in the inventory.
+
+```bash
+ansible all --list-hosts -i inventory.yml
+```
+
+---
+
+
+## 4. Understanding YAML
 
 YAML (YAML Ain't Markup Language) is used for writing Ansible playbooks and configuration files.  
 YAML is a human-readable data serialization language. It is commonly used for configuration files and in applications where data is being stored.  
@@ -534,7 +660,7 @@ websites:
 
 ---
 
-## 4. Ansible Inventory
+## 5. Ansible Inventory
 
 The inventory file lists all hosts managed by Ansible.
 
@@ -607,7 +733,7 @@ all:
 
 ---
 
-## 5. Ansible Playbooks
+## 6. Ansible Playbooks
 
 Playbooks define tasks to be executed on hosts. An Ansible Playbook is a configuration management and automation script written in YAML that defines a set of tasks for Ansible to execute on remote machines. Playbooks are the main way to organize and execute automation jobs in Ansible. They can include various tasks, handlers, variables, and other elements needed to manage systems, configure applications, or deploy services.
 
@@ -686,7 +812,7 @@ ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1, Group2'"
 
 ---
 
-## 6. Ansible Variables
+## 7. Ansible Variables
 
 **What Are Variables?**
 
@@ -875,7 +1001,7 @@ Ansible applies variables based on a precedence hierarchy. Variables defined in 
 
 ---
 
-## 7. Ansible `when` Condition
+## 8. Ansible `when` Condition
 
 ### Overview
 
@@ -941,7 +1067,7 @@ Use and or or for complex conditions.
 ---
 
 
-## 8. Understanding `set_fact` in Ansible
+## 9. Understanding `set_fact` in Ansible
 
 ### What is `set_fact`?
 
@@ -1163,7 +1289,7 @@ ok: [localhost] => {
 
 ---
 
-## 9. Understanding `register` in Ansible
+## 10. Understanding `register` in Ansible
 
 ### What is `register`?
 
@@ -1275,7 +1401,7 @@ The variable created by `register` contains the following structure:
 
 ---
 
-## 10. Introduction to `loop` in Ansible
+## 11. Introduction to `loop` in Ansible
 
 ### What is `loop`?
 
@@ -1583,7 +1709,7 @@ changed: [localhost] => (item=WebServer: Nginx)
 
 ---
 
-## 11. Ansible `Modules`
+## 12. Ansible `Modules`
 
 Ansible provides a variety of modules specifically designed for managing systems. These modules allow administrators to perform tasks like installing software, managing services, handling files, and running PowerShell commands efficiently.
 
