@@ -2005,5 +2005,3 @@ This course provides a foundation for getting started with Ansible. Explore the 
 [Ansible Documents](https://docs.ansible.com/projects/ansible/latest/)
 
 ---
-
-
