@@ -222,7 +222,7 @@ ansible-galaxy collection list | grep ansible.windows
 Run the official Ansible PowerShell script on each Windows target to enable and configure WinRM:
 
 🔗 **ConfigureRemotingForAnsible.ps1**
-[https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+[ConfigureRemotingForAnsible](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
 
 > This script configures WinRM, firewall rules, and required settings for Ansible connectivity.
 
