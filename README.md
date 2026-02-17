@@ -34,7 +34,6 @@
 
 ---
 
-# Ansible
 
 ## 1. Introduction to Ansible
 
