@@ -1519,9 +1519,11 @@ Here’s a comprehensive tutorial on common Windows-specific Ansible modules wit
 ---
 
 ### **1. `win_command`: Running Windows Commands**
+
 The `win_command` module runs arbitrary commands on Windows hosts without using a shell.
 
 **Example: Running a Simple Command**
+
 ```yaml
 ---
 - name: Run a command on a Windows host
@@ -1538,11 +1540,13 @@ The `win_command` module runs arbitrary commands on Windows hosts without using 
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Display the Windows hostname] 
 changed: [CCLABAPP01]
@@ -1555,15 +1559,16 @@ ok: [CCLABAPP01] => {
 ok: [CCLABAPP02] => {
     "result.stdout": "cclabapp02\r\n"
 }
-
 ```
 
 ---
 
 ### **2. `win_shell`: Executing Commands in a Shell**
+
 The `win_shell` module runs commands in a Windows shell, allowing for more complex command execution.
 
 **Example: Run a Batch Script**
+
 ```yaml
 ---
 - name: Run a PowerShell Command 
@@ -1580,11 +1585,13 @@ The `win_shell` module runs commands in a Windows shell, allowing for more compl
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Test the Connection] 
 changed: [CCLABAPP01]
@@ -1602,9 +1609,11 @@ ok: [CCLABAPP02] => {
 ---
 
 ### **3. `win_service`: Managing Windows Services**
+
 The `win_service` module starts, stops, restarts, or ensures the state of a Windows service.
 
 **Example: Ensure the Windows Update Service is Running**
+
 ```yaml
 ---
 - name: Run a PowerShell Command Windows 
@@ -1623,11 +1632,13 @@ The `win_service` module starts, stops, restarts, or ensures the state of a Wind
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Start Windows Update service] 
 ok: [CCLABAPP01]
@@ -1674,15 +1685,16 @@ ok: [CCLABAPP02] => {
         "username": "LocalSystem"
     }
 }
-
 ```
 
 ---
 
 ### **4. `win_package`: Installing or Removing Software**
+
 The `win_package` module handles installation or removal of software on Windows.
 
 **Example: Install Software**
+
 ```yaml
 ---
 - name: Install software using win_package
@@ -1701,13 +1713,14 @@ The `win_package` module handles installation or removal of software on Windows.
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
-```output
 
+```output
 TASK [Install Google Chrome] 
 changed: [CCLABAPP02]
 changed: [CCLABAPP01]
@@ -1730,12 +1743,15 @@ ok: [CCLABAPP02] => {
     }
 }
 ```
+
 ---
 
 ### **5. `win_copy`: Copying Files to Windows Hosts**
+
 The `win_copy` module copies files or directories from the Ansible control machine to Windows hosts.
 
 **Example: Copy a File to a Windows Host**
+
 ```yaml
 ---
 - name: Copy a file to a Windows host
@@ -1755,11 +1771,13 @@ The `win_copy` module copies files or directories from the Ansible control machi
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Copy a file] 
 ok: [CCLABAPP01]
@@ -1795,9 +1813,11 @@ ok: [CCLABAPP02] => {
 ---
 
 ### **6. `win_file`: Managing File and Directory States**
+
 The `win_file` module manages file and directory creation, and deletion.
 
 **Example: Create a Directory**
+
 ```yaml
 ---
 - name: Create a directory on a Windows host
@@ -1816,11 +1836,13 @@ The `win_file` module manages file and directory creation, and deletion.
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Ensure directory exists] 
 changed: [CCLABAPP01]
@@ -1839,15 +1861,16 @@ ok: [CCLABAPP02] => {
         "failed": false
     }
 }
-
 ```
 
 ---
 
 ### **7. `win_reboot`: Rebooting a Windows Host**
+
 The `win_reboot` module reboots a Windows host and waits for it to come back online.
 
 **Example: Reboot**
+
 ```yaml
 ---
 - name: Reboot Windows host
@@ -1865,11 +1888,13 @@ The `win_reboot` module reboots a Windows host and waits for it to come back onl
 ```
 
 #### Command:
+
 ```bash
- ansible-playbook Playbook.yml -i inventory.yml
+ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 #### Output:
+
 ```output
 TASK [Reboot the server] 
 changed: [CCLABAPP02]
@@ -1894,13 +1919,16 @@ ok: [CCLABAPP02] => {
         "unreachable": false
     }
 }
-
 ```
 
 ---
 
-
-
 ## Conclusion
+
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.
-https://docs.ansible.com/projects/ansible/latest/
+
+[Ansible Documents](https://docs.ansible.com/projects/ansible/latest/)
+
+---
+
+
