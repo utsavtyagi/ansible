@@ -905,6 +905,35 @@ ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1, Group2'"
 
 ---
 
+### Run Ansible in Check Mode (Dry Run)
+
+Simulates changes **without making actual changes**.
+
+```bash
+ansible-playbook Playbook.yml -i inventory.yml --check
+```
+
+Useful for:
+
+* Validating playbooks
+* Change impact analysis
+
+---
+
+### Increase Verbosity for Debugging
+
+Adds detailed execution logs.
+
+```bash
+ansible-playbook Playbook.yml -i inventory.yml -v
+ansible-playbook Playbook.yml -i inventory.yml -vv
+ansible-playbook Playbook.yml -i inventory.yml -vvv
+```
+
+Higher verbosity = more execution details.
+
+---
+
 ## 7. Ansible Variables
 
 **What Are Variables?**
