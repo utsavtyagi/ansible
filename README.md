@@ -612,24 +612,34 @@ ansible-playbook Playbook.yml -i inventory.yml -e "Group='Group1, Group2'"
 ---
 
 ## 6. Ansible Variables
+
 **What Are Variables?**
 
 Variables in Ansible are used to store values that can be reused throughout playbooks, making them more flexible and easier to manage. These values can include strings, integers, lists, dictionaries, and more.
 
+---
+
 **Basic Syntax**
+
 Ansible variables are defined in YAML and are always referenced using double curly braces ({{ variable_name }}).
+
+---
 
 **Example:**
 
 ##### Playbook:
+
 ```yaml
 vars:
   my_variable: "Hello, World!"
 ```
 
+---
+
 **Using a Variable**
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Print the Variable
@@ -641,19 +651,22 @@ vars:
     - name: Print variable
       debug:
         msg: "{{ my_variable }}"
-
 ```
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml
 ```
+
+---
 
 ### Defining Variables
 
 #### 1. Inside a Playbook:
 
 ##### Playbook:
+
 ```yaml
 - name: Variable inside a playbook
 - hosts: all
@@ -665,11 +678,14 @@ ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml
 ```
 
-#### 2. In a Separate File (Vars File): 
+---
+
+#### 2. In a Separate File (Vars File):
 
 Create variables.yml:
 
@@ -680,6 +696,7 @@ example_var: "Ansible from vars file!"
 Use it in a playbook:
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Variables in a separate file
@@ -694,13 +711,17 @@ Use it in a playbook:
 ```
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml
 ```
 
+---
+
 #### 3. From the Command Line:
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Variables from the command line
@@ -712,6 +733,7 @@ ansible-playbook Playbook.yml -i inventory.yml
 ```
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml --extra-vars "example_var='CLI variable'"
 ```
@@ -719,44 +741,53 @@ ansible-playbook Playbook.yml -i inventory.yml --extra-vars "example_var='CLI va
 OR
 
 ##### Command:
+
 ```bash
 ansible-playbook Playbook.yml -i inventory.yml -e "example_var='CLI variable'"
 ```
 
+---
+
 ### Types of Ansible Variables
+
 **Common Types:**
 
 #### 1. String:
+
 ```yaml
 my_string: "Hello"
 ```
 
 #### 2. Integer:
+
 ```yaml
 my_number: 123
 ```
 
 #### 3. Boolean:
+
 ```yaml
 my_boolean: true
 ```
 
 #### 4. List:
+
 ```yaml
 my_list:
   - item1
   - item2
   - item3
-
 ```
 
 #### 5. Dictionary:
+
 ```yaml
 my_dict:
   key1: value1
   key2: value2
-
 ```
+
+---
 
 ### Variable Precedence
 
@@ -767,17 +798,22 @@ Ansible applies variables based on a precedence hierarchy. Variables defined in 
 3. Play variables
 4. Inventory variables
 
+---
+
 ## 7. Ansible `when` Condition
 
 ### Overview
-The `when` condition in Ansible is used to control the execution of tasks based on specific conditions. This allows you to make tasks more dynamic and adaptable. 
+
+The `when` condition in Ansible is used to control the execution of tasks based on specific conditions. This allows you to make tasks more dynamic and adaptable.
 
 The when condition is a powerful feature in Ansible for task control. By using logical operators, variables, and facts, you can create flexible and efficient playbooks.
 
+---
 
 ### Syntax
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Example Task
@@ -785,11 +821,16 @@ The when condition is a powerful feature in Ansible for task control. By using l
   when: <condition>
 ```
 
+---
+
 **Examples**
+
 #### 1. Basic Condition
+
 Run a task only when a variable equals a specific value.
 
 ##### Playbook:
+
 ```yaml
 ---
 - name: Variables from the command line
@@ -804,10 +845,14 @@ Run a task only when a variable equals a specific value.
       when: var1 == "test"
 ```
 
+---
+
 #### 2. Multiple Conditions
+
 Use and or or for complex conditions.
 
 ##### Playbook:
+
 ```yaml
 - name: Run when both conditions are true
   command: echo "Both Conditions Met"
@@ -816,8 +861,10 @@ Use and or or for complex conditions.
 - name: Run when either condition is true
   command: echo "At Least One Condition Met"
   when: var1 == "test" or var2 == "failed"
-
 ```
+
+---
+
 
 ## 8. Understanding `set_fact` in Ansible
 
