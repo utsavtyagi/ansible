@@ -755,15 +755,34 @@ YAML is **indentation-sensitive**. Use **spaces only**.
 
 ## 5. Ansible Inventory
 
-The inventory file lists all hosts managed by Ansible.
+The **Ansible Inventory** defines the list of hosts and groups that Ansible manages.  
+It tells Ansible:
+- **Which machines** to manage
+- **How to connect** to them
+- **What variables** apply to hosts or groups
+
+An inventory can be written in:
+- **INI format** (legacy)
+- **YAML format** (recommended and modern)
 
 ---
 
-### Inventory Examples
+### Inventory Structure
 
-#### List of Servers
+An inventory consists of:
+- **Hosts** – Individual machines
+- **Groups** – Logical collections of hosts
+- **Variables** – Connection details and configuration values
 
-This is a simple list of servers without any grouping.
+---
+
+### Inventory Examples (YAML)
+
+---
+
+#### 1. List of Servers (No Grouping)
+
+This is a simple inventory listing servers without groups.
 
 ```yaml
 ---
@@ -774,11 +793,17 @@ all:
     server3.example.com:
 ```
 
+**Use case**
+
+* Small environments
+* Quick testing
+* Single role deployments
+
 ---
 
-#### Groups and Servers
+#### 2. Groups and Servers
 
-This example includes groups and assigns servers to each group.
+This example defines multiple groups and assigns hosts to each group.
 
 ```yaml
 ---
@@ -795,11 +820,21 @@ AppGroup2:
     cclabwf01:
 ```
 
+**Benefits**
+
+* Organize hosts by role or environment
+* Target specific groups in playbooks
+* Reuse automation logic
+
 ---
 
-#### Groups, Servers, and Parameters (Connection, Port, etc.)
+#### 3. Groups, Hosts, and Global Variables
 
-This example specifies additional parameters like connection type, port, and custom variables.
+This example defines:
+
+* Groups
+* Hosts
+* Global connection parameters
 
 ```yaml
 ---
@@ -823,6 +858,113 @@ all:
     ansible_winrm_port: 5986
     ansible_winrm_scheme: https
 ```
+
+**Explanation**
+
+* Variables under `all.vars` apply to **every host**
+* Useful for common connection settings
+* Common in Windows inventories
+
+---
+
+### Host Variables
+
+You can define variables specific to individual hosts.
+
+```yaml
+---
+AppGroup1:
+  hosts:
+    cclabapp01:
+      ansible_host: 172.16.1.10
+      ansible_user: ansibleuser
+
+    cclabauth01:
+      ansible_host: 172.16.1.11
+      ansible_user: ansibleuser
+```
+
+**Use cases**
+
+* Different IP addresses
+* Different credentials
+* Host-specific configurations
+
+---
+
+### Group Variables
+
+Define variables that apply to all hosts in a group.
+
+```yaml
+---
+LinuxServers:
+  vars:
+    ansible_user: ansibleuser
+    ansible_connection: ssh
+
+  hosts:
+    app01:
+    app02:
+```
+
+**Why group variables?**
+
+* Avoid duplication
+* Improve maintainability
+* Cleaner inventory files
+
+---
+
+### Linux vs Windows Inventory Example
+
+#### Linux Hosts (SSH)
+
+```yaml
+---
+LinuxServers:
+  hosts:
+    app01:
+      ansible_host: 172.16.1.20
+    app02:
+      ansible_host: 172.16.1.21
+
+  vars:
+    ansible_user: ansibleuser
+    ansible_connection: ssh
+```
+
+---
+
+#### Windows Hosts (WinRM)
+
+```yaml
+---
+WindowsServers:
+  hosts:
+    win01:
+      ansible_host: win01.example.com
+    win02:
+      ansible_host: win02.example.com
+
+  vars:
+    ansible_user: Administrator
+    ansible_connection: winrm
+    ansible_winrm_transport: kerberos
+    ansible_winrm_scheme: https
+    ansible_winrm_port: 5986
+    ansible_winrm_server_cert_validation: ignore
+```
+
+---
+
+### Inventory Best Practices
+
+✔ Use YAML format
+✔ Group hosts logically (by role or environment)
+✔ Use group variables instead of repeating host variables
+✔ Keep credentials outside inventory (use Ansible Vault)
+✔ Maintain separate inventories per environment (dev, test, prod)
 
 ---
 
