@@ -2759,8 +2759,10 @@ For professional and enterprise Ansible usage, **`ansible.cfg` is mandatory**.
 
 ## 14. Ansible Roles
 
-Ansible roles provide a **structured, reusable, and scalable** way to organize automation logic.  
+Ansible roles provide a **structured, reusable, and scalable** way to organize automation logic.
 Roles help break large playbooks into **logical components** such as installation, configuration, and service management.
+
+Roles are a **design pattern**, not just a feature, and are essential for production-grade Ansible usage.
 
 ---
 
@@ -2770,7 +2772,7 @@ The recommended way to create a role is using `ansible-galaxy`.
 
 ```bash
 ansible-galaxy role init webserver
-````
+```
 
 This command creates a standard directory structure:
 
@@ -2796,27 +2798,25 @@ webserver/
 
 ---
 
-### Explanation of Role Directory Structure (With Real-World Usage)
+### Explanation of Role Directory Structure (Real-World Usage)
 
-Each directory in an Ansible role serves a **clear real-world purpose**.  
-Roles are designed to mirror how infrastructure and applications are managed in production.
-
-Below is a **practical explanation with real examples and use cases**.
+Each directory in an Ansible role serves a **clear real-world purpose**.
+Roles mirror how infrastructure and applications are managed in **production environments**.
 
 ---
 
-### `tasks/` – Core Automation Logic
+#### `tasks/` – Core Automation Logic
 
 This is the **heart of the role**.
 
-#### What it is used for
+**Used for**
+
 * Installing software
 * Configuring applications
 * Managing services
 * Orchestrating steps in order
 
-#### Real-World Example
-A **webserver role** installs packages, deploys config, and starts services.
+**Real-World Example**
 
 ```yaml
 # roles/webserver/tasks/main.yml
@@ -2835,28 +2835,25 @@ A **webserver role** installs packages, deploys config, and starts services.
   service:
     name: nginx
     state: started
-````
+```
 
-### When to use
-
+**When to use**
 ✔ Every role **must** have `tasks/main.yml`
-✔ Split tasks into multiple files when role grows
+✔ Split tasks into multiple files as the role grows
 
 ---
 
-## `handlers/` – Event-Driven Actions
+#### `handlers/` – Event-Driven Actions
 
 Handlers run **only when notified** by tasks.
 
-### Why handlers exist
+**Why handlers exist**
 
 * Avoid unnecessary restarts
 * Improve idempotency
 * Reduce downtime
 
-### Real-World Example
-
-Restart a service **only if config changes**.
+**Example**
 
 ```yaml
 # roles/webserver/handlers/main.yml
@@ -2866,29 +2863,23 @@ Restart a service **only if config changes**.
     state: restarted
 ```
 
-#### When to use
-
 ✔ Service restarts
 ✔ Reloads
 ✔ Application restarts
 
-❌ Do NOT place regular tasks here
+❌ Do **not** place regular tasks here
 
 ---
 
-### `defaults/` – Safe, Overridable Configuration
+#### `defaults/` – Safe, Overridable Configuration
 
-This directory holds **default values** that users are expected to override.
+Holds **default values** that users are expected to override.
 
-#### Key Characteristics
+**Key characteristics**
 
 * Lowest variable precedence
 * Safe for all environments
 * Designed for flexibility
-
-#### Real-World Example
-
-Same role used in Dev, Test, and Prod.
 
 ```yaml
 # roles/webserver/defaults/main.yml
@@ -2896,32 +2887,19 @@ nginx_port: 80
 server_name: localhost
 ```
 
-#### Override in inventory or playbook
+Override in inventory or playbook:
 
 ```yaml
 nginx_port: 8080
 ```
 
-### When to use
-
-✔ Configurable parameters
-✔ Environment-agnostic defaults
+✔ Ideal for Dev / Test / Prod reuse
 
 ---
 
-### `vars/` – Fixed Role Variables (Use Carefully)
+#### `vars/` – Fixed Role Variables (Use Carefully)
 
 Variables here have **higher precedence** than defaults.
-
-#### Key Characteristics
-
-* Overrides `defaults`
-* Harder to override externally
-* Use sparingly
-
-#### Real-World Example
-
-Internal role constants.
 
 ```yaml
 # roles/webserver/vars/main.yml
@@ -2929,26 +2907,14 @@ nginx_user: nginx
 nginx_group: nginx
 ```
 
-#### Best Practice
-
-⚠ Avoid environment-specific values here
-⚠ Prefer `defaults/` unless absolutely required
+⚠ Avoid environment-specific values
+⚠ Prefer `defaults/` whenever possible
 
 ---
 
-### `templates/` – Dynamic Configuration Files
+#### `templates/` – Dynamic Configuration Files
 
-Stores **Jinja2 templates** (`.j2`) used for dynamic configuration.
-
-#### Why templates are important
-
-* Environment-specific values
-* Avoid hardcoded configs
-* Infrastructure-as-Code friendly
-
-#### Real-World Example
-
-Nginx config with variables.
+Stores **Jinja2 templates** (`.j2`) for dynamic configuration.
 
 ```jinja
 server {
@@ -2964,27 +2930,14 @@ server {
     dest: /etc/nginx/nginx.conf
 ```
 
-#### When to use
-
-✔ Config files
-✔ Application configs
-✔ Service definitions
+✔ Environment-aware
+✔ No hardcoding
 
 ---
 
-### `files/` – Static Files
+#### `files/` – Static Files
 
 Stores files copied **as-is** to target systems.
-
-#### Key Characteristics
-
-* No variable substitution
-* Exact copy
-* Binary-friendly
-
-#### Real-World Example
-
-Copy SSL certificate or executable.
 
 ```yaml
 - name: Copy certificate
@@ -2993,8 +2946,6 @@ Copy SSL certificate or executable.
     dest: /etc/ssl/server.crt
 ```
 
-#### When to use
-
 ✔ Certificates
 ✔ Scripts
 ✔ Binaries
@@ -3002,19 +2953,9 @@ Copy SSL certificate or executable.
 
 ---
 
-### `meta/` – Role Metadata & Dependencies
+#### `meta/` – Role Metadata & Dependencies
 
-Defines **role relationships**.
-
-#### Why meta is useful
-
-* Automatically pull dependencies
-* Enforce role order
-* Clean architecture
-
-#### Real-World Example
-
-Webserver depends on common system setup.
+Defines **role dependencies** and execution order.
 
 ```yaml
 # roles/webserver/meta/main.yml
@@ -3022,59 +2963,43 @@ dependencies:
   - role: common
 ```
 
-#### When to use
-
 ✔ Shared prerequisites
 ✔ Base OS configuration
-✔ Security hardening roles
+✔ Security hardening
 
 ---
 
-### `tests/` – Role Testing
+#### `tests/` – Role Testing
 
 Used for **validation and CI/CD testing**.
-
-#### What it contains
-
-* Test inventory
-* Test playbook
-
-#### Real-World Example
 
 ```bash
 ansible-playbook -i tests/inventory tests/test.yml
 ```
 
-#### When to use
-
 ✔ Enterprise automation
-✔ CI pipelines
 ✔ Regression testing
+✔ CI pipelines
 
 ---
 
-### `README.md` – Role Documentation
+#### `README.md` – Role Documentation
 
-Acts as **self-documentation** for the role.
+Acts as **self-documentation**.
 
-#### Should include
+Should include:
 
-* What the role does
+* Role purpose
 * Variables
 * Example usage
 * Dependencies
 
-#### Real-World Importance
-
-✔ Onboarding new team members
-✔ Long-term maintenance
-✔ Open-source roles
+✔ Improves onboarding
+✔ Aids long-term maintenance
 
 ---
 
 ### How Roles Are Used in Real Projects
-
-Typical enterprise layout:
 
 ```text
 project/
@@ -3089,7 +3014,6 @@ project/
 ```
 
 ```yaml
-# site.yml
 - hosts: all
   roles:
     - common
@@ -3098,37 +3022,7 @@ project/
 
 ---
 
-### Real-World Benefits of Roles
-
-✔ Clear separation of concerns
-✔ Reusable across environments
-✔ Faster development
-✔ Easier troubleshooting
-✔ Team-friendly structure
-✔ CI/CD ready
-
----
-
-### Final Takeaway
-
-Ansible roles are **not just a feature** — they are a **design pattern**.
-
-If you are:
-
-* Managing more than one server
-* Working in a team
-* Running CI/CD pipelines
-* Supporting multiple environments
-
-👉 **Roles are mandatory, not optional.**
-
----
-
-
-
-### Create Roles Inside a Project
-
-Best practice is to store all roles inside a `roles/` directory.
+### Creating Roles Inside a Project
 
 ```bash
 mkdir roles
@@ -3136,15 +3030,6 @@ cd roles
 ansible-galaxy role init common
 ansible-galaxy role init webserver
 ansible-galaxy role init database
-```
-
-Resulting structure:
-
-```text
-roles/
-├── common/
-├── webserver/
-└── database/
 ```
 
 ---
@@ -3198,7 +3083,6 @@ ansible-galaxy role remove geerlingguy.nginx
 ### Using Roles in a Playbook
 
 ```yaml
----
 - hosts: all
   roles:
     - common
@@ -3215,7 +3099,7 @@ ansible-playbook site.yml -i inventory.yml
 
 ### Role Execution Order
 
-Roles execute **in the order defined** in the playbook.
+Roles execute **in the order defined**:
 
 ```yaml
 roles:
@@ -3258,23 +3142,12 @@ ansible-playbook site.yml -i inventory.yml --skip-tags nginx
 
 ---
 
-### Validate and Test Roles
-
-#### Syntax Check
+### Validating and Testing Roles
 
 ```bash
 ansible-playbook site.yml --syntax-check
+ansible-playbook site.yml --check
 ```
-
----
-
-#### Dry Run (Check Mode)
-
-```bash
-ansible-playbook site.yml -i inventory.yml --check
-```
-
-Simulates changes without modifying systems.
 
 ---
 
@@ -3351,11 +3224,23 @@ ansible-playbook windows.yml -i inventory.yml
 ### Role Development Best Practices
 
 ✔ One role = one responsibility
-✔ Use `defaults/main.yml` for configurable values
-✔ Use `handlers` for service restarts
+✔ Use `defaults/` for configuration
+✔ Use `handlers/` for restarts
 ✔ Avoid hardcoding credentials
-✔ Keep roles reusable and environment-agnostic
-✔ Prefer roles over large monolithic playbooks
+✔ Keep roles reusable
+
+---
+
+### Final Takeaway
+
+If you are:
+
+* Managing multiple servers
+* Working in teams
+* Running CI/CD
+* Supporting multiple environments
+
+👉 **Ansible roles are mandatory, not optional.**
 
 ---
 
