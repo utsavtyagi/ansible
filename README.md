@@ -2645,114 +2645,33 @@ Use **project-level `ansible.cfg`** inside your repository.
 
 ```ini
 [defaults]
+
+# Inventory file location
 inventory = Inventory/hosts
+
+# Enable logging
 log_path = Logs/ansible.log
-forks = 50
+
+# Parallel execution
+forks = 20
+
+# Faster execution for large inventories
 strategy = free
+
+# Disable SSH host key prompt
 host_key_checking = False
+
+# Disable noisy warnings
 deprecation_warnings = False
 nocows = True
+
+# Force Python 3 on managed nodes
 interpreter_python = /usr/bin/python3
-callback_whitelist = timer, profile_tasks, profile_roles
 
-sudo = true
-sudo_user = root
+# Useful execution insights
+callback_whitelist = timer, profile_tasks
+
 ```
-
----
-
-### Explanation of Common `[defaults]` Options
-
-#### `inventory`
-
-```ini
-inventory = Inventory/hosts
-```
-
-* Path to the default inventory file
-* Avoids passing `-i` every time
-
----
-
-#### `log_path`
-
-```ini
-log_path = Logs/ansible.log
-```
-
-* Enables logging
-* Stores execution output for auditing and debugging
-* Directory must exist
-
----
-
-#### `forks`
-
-```ini
-forks = 50
-```
-
-* Number of parallel tasks Ansible can run
-* Higher value = faster execution
-* Increase carefully to avoid overloading control node
-
----
-
-#### `strategy`
-
-```ini
-strategy = free
-```
-
-* `linear` (default): hosts execute tasks step-by-step
-* `free`: hosts run independently (faster)
-* Recommended for large environments
-
----
-
-#### `host_key_checking`
-
-```ini
-host_key_checking = False
-```
-
-* Disables SSH host key verification
-* Useful in automation and dynamic infrastructure
-* Avoid prompts during execution
-
----
-
-#### `deprecation_warnings`
-
-```ini
-deprecation_warnings = False
-```
-
-* Suppresses deprecated feature warnings
-* Useful in clean CI/CD logs
-
----
-
-#### `nocows`
-
-```ini
-nocows = True
-```
-
-* Disables ASCII cows
-* Keeps logs clean and professional
-
----
-
-#### `interpreter_python`
-
-```ini
-interpreter_python = /usr/bin/python3
-```
-
-* Forces Python 3 usage on managed nodes
-* Avoids Python version conflicts
-* Highly recommended for Linux systems
 
 ---
 
@@ -2771,43 +2690,6 @@ Enables useful execution callbacks:
 | `profile_roles` | Shows time taken by each role       |
 
 Excellent for **performance tuning**.
-
----
-
-### Privilege Escalation Settings
-
-Although deprecated `sudo` still works, **recommended approach** is:
-
-```ini
-[privilege_escalation]
-become = True
-become_method = sudo
-become_user = root
-become_ask_pass = False
-```
-
-✅ Modern replacement for:
-
-```ini
-sudo = true
-sudo_user = root
-```
-
----
-
-### SSH Connection Optimization
-
-```ini
-[ssh_connection]
-pipelining = True
-ssh_args = -o ControlMaster=auto -o ControlPersist=60s
-```
-
-Benefits:
-
-* Faster SSH connections
-* Reduced authentication overhead
-* Better performance at scale
 
 ---
 
