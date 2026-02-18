@@ -2751,6 +2751,10 @@ It allows you to:
 
 For professional and enterprise Ansible usage, **`ansible.cfg` is mandatory**.
 
+### Reference
+
+[Ansible Configuration](https://docs.ansible.com/projects/ansible/latest/reference_appendices/config.html)
+
 ---
 
 ## 14. Ansible Roles
