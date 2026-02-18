@@ -32,6 +32,8 @@
 10. [Understanding `register` in Ansible](#10-understanding-register-in-ansible)
 11. [Introduction to `loop` in Ansible](#11-introduction-to-loop-in-ansible)
 12. [Ansible `Modules`](#12-ansible-modules)
+13. [Ansible Configuration File](#13-ansible-configuration-file)
+14. [Ansible Roles](#14-ansible-roles)
 
 ---
 
@@ -2574,7 +2576,302 @@ ok: [CCLABAPP02] => {
 
 ---
 
-## Ansible Roles
+## 13. Ansible Configuration File
+
+The **Ansible configuration file (`ansible.cfg`)** controls how Ansible behaves at runtime.  
+It defines default settings such as inventory location, privilege escalation, logging, parallelism, Python interpreter, and execution strategy.
+
+Using `ansible.cfg` helps you:
+- Avoid long command-line options
+- Enforce consistent behavior across environments
+- Improve performance and debugging
+- Standardize automation in teams
+
+---
+
+### What is `ansible.cfg`?
+
+`ansible.cfg` is an **INI-style configuration file** that Ansible reads **before execution**.  
+It contains sections such as `[defaults]`, `[privilege_escalation]`, `[ssh_connection]`, etc.
+
+---
+
+### Default Locations of `ansible.cfg`
+
+Ansible looks for `ansible.cfg` in the following order:
+
+1. **Environment variable**
+   ```bash
+   ANSIBLE_CONFIG=/path/to/ansible.cfg
+```
+
+2. **Current project directory**
+
+   ```text
+   ./ansible.cfg
+   ```
+
+3. **User home directory**
+
+   ```text
+   ~/.ansible.cfg
+   ```
+
+4. **System-wide configuration**
+
+   ```text
+   /etc/ansible/ansible.cfg
+   ```
+
+---
+
+### Priority of Configuration Files (IMPORTANT)
+
+If multiple config files exist, Ansible uses **only ONE** — based on priority.
+
+| Priority | Location                   | Use Case                  |
+| -------- | -------------------------- | ------------------------- |
+| Highest  | `ANSIBLE_CONFIG`           | CI/CD, temporary override |
+| High     | Project directory          | Recommended (per project) |
+| Medium   | User home                  | Personal defaults         |
+| Lowest   | `/etc/ansible/ansible.cfg` | System-wide defaults      |
+
+✅ **Best Practice:**
+Use **project-level `ansible.cfg`** inside your repository.
+
+---
+
+### Sample `ansible.cfg` (Commonly Used)
+
+```ini
+[defaults]
+inventory = Inventory/hosts
+log_path = Logs/ansible.log
+forks = 50
+strategy = free
+host_key_checking = False
+deprecation_warnings = False
+nocows = True
+interpreter_python = /usr/bin/python3
+callback_whitelist = timer, profile_tasks, profile_roles
+
+sudo = true
+sudo_user = root
+```
+
+---
+
+### Explanation of Common `[defaults]` Options
+
+#### `inventory`
+
+```ini
+inventory = Inventory/hosts
+```
+
+* Path to the default inventory file
+* Avoids passing `-i` every time
+
+---
+
+#### `log_path`
+
+```ini
+log_path = Logs/ansible.log
+```
+
+* Enables logging
+* Stores execution output for auditing and debugging
+* Directory must exist
+
+---
+
+#### `forks`
+
+```ini
+forks = 50
+```
+
+* Number of parallel tasks Ansible can run
+* Higher value = faster execution
+* Increase carefully to avoid overloading control node
+
+---
+
+#### `strategy`
+
+```ini
+strategy = free
+```
+
+* `linear` (default): hosts execute tasks step-by-step
+* `free`: hosts run independently (faster)
+* Recommended for large environments
+
+---
+
+#### `host_key_checking`
+
+```ini
+host_key_checking = False
+```
+
+* Disables SSH host key verification
+* Useful in automation and dynamic infrastructure
+* Avoid prompts during execution
+
+---
+
+#### `deprecation_warnings`
+
+```ini
+deprecation_warnings = False
+```
+
+* Suppresses deprecated feature warnings
+* Useful in clean CI/CD logs
+
+---
+
+#### `nocows`
+
+```ini
+nocows = True
+```
+
+* Disables ASCII cows
+* Keeps logs clean and professional
+
+---
+
+#### `interpreter_python`
+
+```ini
+interpreter_python = /usr/bin/python3
+```
+
+* Forces Python 3 usage on managed nodes
+* Avoids Python version conflicts
+* Highly recommended for Linux systems
+
+---
+
+#### `callback_whitelist`
+
+```ini
+callback_whitelist = timer, profile_tasks, profile_roles
+```
+
+Enables useful execution callbacks:
+
+| Callback        | Purpose                             |
+| --------------- | ----------------------------------- |
+| `timer`         | Shows total playbook execution time |
+| `profile_tasks` | Shows slowest tasks                 |
+| `profile_roles` | Shows time taken by each role       |
+
+Excellent for **performance tuning**.
+
+---
+
+### Privilege Escalation Settings
+
+Although deprecated `sudo` still works, **recommended approach** is:
+
+```ini
+[privilege_escalation]
+become = True
+become_method = sudo
+become_user = root
+become_ask_pass = False
+```
+
+✅ Modern replacement for:
+
+```ini
+sudo = true
+sudo_user = root
+```
+
+---
+
+### SSH Connection Optimization
+
+```ini
+[ssh_connection]
+pipelining = True
+ssh_args = -o ControlMaster=auto -o ControlPersist=60s
+```
+
+Benefits:
+
+* Faster SSH connections
+* Reduced authentication overhead
+* Better performance at scale
+
+---
+
+### WinRM Configuration (Optional)
+
+For Windows environments:
+
+```ini
+[defaults]
+timeout = 60
+
+[winrm]
+operation_timeout_sec = 60
+read_timeout_sec = 70
+```
+
+Improves stability for slow Windows operations.
+
+---
+
+### Verify Active Configuration
+
+To see which config file Ansible is using:
+
+```bash
+ansible --version
+```
+
+Example output:
+
+```text
+config file = /path/to/project/ansible.cfg
+```
+
+---
+
+### Best Practices for `ansible.cfg`
+
+✔ Keep one `ansible.cfg` per project
+✔ Commit project-level config to Git
+✔ Enable logging and callbacks
+✔ Avoid system-wide config changes
+✔ Use `free` strategy for large environments
+✔ Set Python interpreter explicitly
+
+---
+
+### Summary
+
+`ansible.cfg` is the **control center of Ansible execution**.
+
+It allows you to:
+
+* Control behavior globally
+* Improve performance
+* Simplify commands
+* Standardize automation
+* Enable better debugging and auditing
+
+For professional and enterprise Ansible usage, **`ansible.cfg` is mandatory**.
+
+---
+
+## 14. Ansible Roles
 
 Ansible roles provide a **structured, reusable, and scalable** way to organize automation logic.  
 Roles help break large playbooks into **logical components** such as installation, configuration, and service management.
