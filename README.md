@@ -2574,6 +2574,278 @@ ok: [CCLABAPP02] => {
 
 ---
 
+## Ansible Roles
+
+Ansible roles provide a **structured, reusable, and scalable** way to organize automation logic.  
+Roles help break large playbooks into **logical components** such as installation, configuration, and service management.
+
+---
+
+### Role Directory Structure
+
+The recommended way to create a role is using `ansible-galaxy`.
+
+```bash
+ansible-galaxy role init webserver
+````
+
+This command creates a standard directory structure:
+
+```text
+webserver/
+├── defaults/
+│   └── main.yml
+├── files/
+├── handlers/
+│   └── main.yml
+├── meta/
+│   └── main.yml
+├── tasks/
+│   └── main.yml
+├── templates/
+├── tests/
+│   ├── inventory
+│   └── test.yml
+├── vars/
+│   └── main.yml
+└── README.md
+```
+
+---
+
+### Create Roles Inside a Project
+
+Best practice is to store all roles inside a `roles/` directory.
+
+```bash
+mkdir roles
+cd roles
+ansible-galaxy role init common
+ansible-galaxy role init webserver
+ansible-galaxy role init database
+```
+
+Resulting structure:
+
+```text
+roles/
+├── common/
+├── webserver/
+└── database/
+```
+
+---
+
+### Common Commands for Working with Roles
+
+#### List Installed Roles
+
+```bash
+ansible-galaxy role list
+```
+
+---
+
+#### Install a Role from Ansible Galaxy
+
+```bash
+ansible-galaxy role install geerlingguy.nginx
+```
+
+Roles are installed under:
+
+```text
+~/.ansible/roles/
+```
+
+---
+
+#### Install Roles Using `requirements.yml`
+
+```yaml
+---
+- name: geerlingguy.nginx
+- name: geerlingguy.mysql
+```
+
+```bash
+ansible-galaxy role install -r requirements.yml
+```
+
+---
+
+#### Remove an Installed Role
+
+```bash
+ansible-galaxy role remove geerlingguy.nginx
+```
+
+---
+
+### Using Roles in a Playbook
+
+```yaml
+---
+- hosts: all
+  roles:
+    - common
+    - webserver
+```
+
+Run the playbook:
+
+```bash
+ansible-playbook site.yml -i inventory.yml
+```
+
+---
+
+### Role Execution Order
+
+Roles execute **in the order defined** in the playbook.
+
+```yaml
+roles:
+  - common
+  - webserver
+  - application
+```
+
+Execution order:
+
+1. common
+2. webserver
+3. application
+
+---
+
+### Run Roles with Tags
+
+#### Add Tags in Role Tasks
+
+```yaml
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+  tags: nginx
+```
+
+Run only tagged tasks:
+
+```bash
+ansible-playbook site.yml -i inventory.yml --tags nginx
+```
+
+Skip tagged tasks:
+
+```bash
+ansible-playbook site.yml -i inventory.yml --skip-tags nginx
+```
+
+---
+
+### Validate and Test Roles
+
+#### Syntax Check
+
+```bash
+ansible-playbook site.yml --syntax-check
+```
+
+---
+
+#### Dry Run (Check Mode)
+
+```bash
+ansible-playbook site.yml -i inventory.yml --check
+```
+
+Simulates changes without modifying systems.
+
+---
+
+### Linux Role Example (Package Installation)
+
+**Role:** `roles/common/tasks/main.yml`
+
+```yaml
+---
+- name: Install common Linux packages
+  yum:
+    name:
+      - vim
+      - curl
+      - git
+    state: present
+```
+
+---
+
+### Windows Role Example 1 – Create Directory Structure
+
+**Role:** `roles/windows_common/tasks/main.yml`
+
+```yaml
+---
+- name: Create application directories
+  win_file:
+    path: C:\App\Logs
+    state: directory
+
+- name: Create temp directory
+  win_file:
+    path: C:\Temp
+    state: directory
+```
+
+---
+
+### Windows Role Example 2 – Using Existing Windows Module (`win_service`)
+
+**Use Case:** Ensure IIS service is running
+
+**Role:** `roles/windows_iis/tasks/main.yml`
+
+```yaml
+---
+- name: Ensure IIS service is running
+  win_service:
+    name: W3SVC
+    state: started
+```
+
+---
+
+#### Use Windows Roles in a Playbook
+
+```yaml
+---
+- hosts: WindowsServers
+  roles:
+    - windows_common
+    - windows_iis
+```
+
+Run:
+
+```bash
+ansible-playbook windows.yml -i inventory.yml
+```
+
+---
+
+### Role Development Best Practices
+
+✔ One role = one responsibility
+✔ Use `defaults/main.yml` for configurable values
+✔ Use `handlers` for service restarts
+✔ Avoid hardcoding credentials
+✔ Keep roles reusable and environment-agnostic
+✔ Prefer roles over large monolithic playbooks
+
+---
+
 ## Conclusion
 
 This course provides a foundation for getting started with Ansible. Explore the official Ansible documentation for more advanced features and modules.
